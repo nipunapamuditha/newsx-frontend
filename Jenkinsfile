@@ -10,13 +10,17 @@ pipeline {
         }
         stage('Set Node.js Version') {
             steps {
-                // Ensure Node.js 14 or higher is used
+                // Use nvm (Node Version Manager) to set Node.js version
                 sh '''
-                if ! command -v node &> /dev/null || [ "$(node -v | cut -d. -f1 | tr -d v)" -lt 14 ]; then
-                    echo "Installing Node.js 14..."
-                    curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
-                    apt-get install -y nodejs
+                export NVM_DIR="$HOME/.nvm"
+                if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+                    echo "Installing nvm..."
+                    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
                 fi
+                source "$NVM_DIR/nvm.sh"
+                echo "Installing Node.js 14..."
+                nvm install 14
+                nvm use 14
                 echo "Using Node.js version:"
                 node -v
                 '''

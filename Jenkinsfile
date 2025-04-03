@@ -8,6 +8,20 @@ pipeline {
                 git 'https://github.com/nipunapamuditha/newsx-frontend.git'
             }
         }
+        stage('Set Node.js Version') {
+            steps {
+                // Ensure Node.js 14 or higher is used
+                sh '''
+                if ! command -v node &> /dev/null || [ "$(node -v | cut -d. -f1 | tr -d v)" -lt 14 ]; then
+                    echo "Installing Node.js 14..."
+                    curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+                    apt-get install -y nodejs
+                fi
+                echo "Using Node.js version:"
+                node -v
+                '''
+            }
+        }
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'

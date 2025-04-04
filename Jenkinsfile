@@ -127,6 +127,7 @@ EOF
             sh '''
             # First ensure the target directory exists with proper permissions
             ssh -o StrictHostKeyChecking=no jenkins@${DEPLOY_SERVER} "mkdir -p /home/jenkins/frontend && chmod 755 /home/jenkins/frontend"
+            rsync -avz --chmod=ugo+rwx -e "ssh -o StrictHostKeyChecking=no" dist/ jenkins@${DEPLOY_SERVER}:/home/jenkins/frontend/
             
             # Load NVM environment
             . "${WORKSPACE}/load-nvm.sh"

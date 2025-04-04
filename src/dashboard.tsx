@@ -43,6 +43,45 @@ const Dashboard = () => {
   const [audioFiles, setAudioFiles] = useState<Array<{title: string, artist: string, url: string}>>([
     { title: 'Loading...', artist: 'Please wait', url: '' }
   ]);
+
+
+  // Add these state variables
+const [currentTime, setCurrentTime] = useState(0);
+const [duration, setDuration] = useState(0);
+
+// Add this helper function
+const formatTime = (seconds: number) => {
+  if (isNaN(seconds)) return "0:00";
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
+
+// Update your updateProgress function in useEffect
+useEffect(() => {
+  const updateProgress = () => {
+    const duration = audioRef.current.duration;
+    const currentTime = audioRef.current.currentTime;
+    if (!isNaN(duration) && duration > 0) {
+      setProgress((currentTime / duration) * 100);
+      setCurrentTime(currentTime);
+      setDuration(duration);
+    }
+  };
+
+  // Additional listener for when duration becomes available
+  const updateDuration = () => {
+    setDuration(audioRef.current.duration);
+  };
+
+  audioRef.current.addEventListener('timeupdate', updateProgress);
+  audioRef.current.addEventListener('loadedmetadata', updateDuration);
+  
+  return () => {
+    audioRef.current.removeEventListener('timeupdate', updateProgress);
+    audioRef.current.removeEventListener('loadedmetadata', updateDuration);
+  };
+}, []);
   
   // Loading state
   const [isLoadingAudio, setIsLoadingAudio] = useState(true);
@@ -570,13 +609,13 @@ const refreshAudioFiles = () => {
                     }
                   }}
                 />
-                <Typography variant="caption" sx={{ 
-                  width: 40, 
-                  textAlign: 'center',
-                  display: { xs: 'none', sm: 'block' }
-                }}>
-                  3:45
-                </Typography>
+             <Typography variant="caption">
+  {formatTime(currentTime)}
+</Typography>
+<Slider /* ... */ />
+<Typography variant="caption">
+  {formatTime(duration)}
+</Typography>
               </Box>
             </Box>
           </Grid>

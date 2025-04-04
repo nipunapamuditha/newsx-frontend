@@ -122,28 +122,31 @@ EOF
         }
         
         stage('Deploy') {
-            steps {
-                sshagent(['0ff14880-bcc6-4400-a835-a66a5a3cf0ba']) {
-                    sh '''
-                    # Load NVM environment
-                    . "${WORKSPACE}/load-nvm.sh"
-                    
-                    # Make sure dist directory exists before trying to copy
-                    if [ -d "dist" ]; then
-                        # Verbose output for debugging
-                        echo "Found dist directory with contents:"
-                        ls -la dist/
-                        
-                        # Alternative approach - use StrictHostKeyChecking=no option
-                        scp -o StrictHostKeyChecking=no -r dist/* jenkins@${DEPLOY_SERVER}:/home/jenkins/frontend
-                    else
-                        echo "Error: dist directory not found. Build may have failed."
-                        exit 1
-                    fi
-                    '''
-                }
-            }
+    steps {
+        sshagent(['0ff14880-bcc6-4400-a835-a66a5a3cf0ba']) {
+            sh '''
+            # First ensure the target directory exists with proper permissions
+            ssh -o StrictHostKeyChecking=no jenkins@${DEPLOY_SERVER} "mkdir -p /home/jenkins/frontend && chmod 755 /home/jenkins/frontend"
+            
+            # Load NVM environment
+            . "${WORKSPACE}/load-nvm.sh"
+            
+            # Make sure dist directory exists before trying to copy
+            if [ -d "dist" ]; then
+                # Verbose output for debugging
+                echo "Found dist directory with contents:"
+                ls -la dist/
+                
+                # Copy files using rsync for better reliability
+                rsync -avz -e "ssh -o StrictHostKeyChecking=no" dist/ jenkins@${DEPLOY_SERVER}:/home/jenkins/frontend/
+            else
+                echo "Error: dist directory not found. Build may have failed."
+                exit 1
+            fi
+            '''
         }
+    }
+}
     }
     
     post {

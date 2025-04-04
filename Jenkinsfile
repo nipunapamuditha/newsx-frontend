@@ -8,6 +8,8 @@ pipeline {
         NODE_VERSION = "22"
         // Use .nvm in the build workspace to ensure isolation
         NVM_DIR = "${WORKSPACE}/.nvm"
+        // Target server
+        DEPLOY_SERVER = "10.10.10.81"
     }
     
     stages {
@@ -43,6 +45,21 @@ nvm use default
 export PATH="\${PWD}/node_modules/.bin:\${PATH}"
 EOF
                 chmod +x "${WORKSPACE}/load-nvm.sh"
+                '''
+            }
+        }
+        
+        stage('Add Host to Known Hosts') {
+            steps {
+                sh '''
+                # Create .ssh directory if it doesn't exist
+                mkdir -p ~/.ssh
+                
+                # Add the host key to known_hosts (automatically accepting it)
+                ssh-keyscan -H ${DEPLOY_SERVER} >> ~/.ssh/known_hosts
+                
+                # Set proper permissions
+                chmod 644 ~/.ssh/known_hosts
                 '''
             }
         }
@@ -113,8 +130,12 @@ EOF
                     
                     # Make sure dist directory exists before trying to copy
                     if [ -d "dist" ]; then
-                        # Vite outputs to 'dist' directory
-                        scp -r dist/* jenkins@10.10.10.81:/home/jenkins/frontend
+                        # Verbose output for debugging
+                        echo "Found dist directory with contents:"
+                        ls -la dist/
+                        
+                        # Alternative approach - use StrictHostKeyChecking=no option
+                        scp -o StrictHostKeyChecking=no -r dist/* jenkins@${DEPLOY_SERVER}:/home/jenkins/frontend
                     else
                         echo "Error: dist directory not found. Build may have failed."
                         exit 1

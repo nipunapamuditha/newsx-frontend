@@ -9,23 +9,23 @@ pipeline {
             }
         }
         stage('Set Node.js Version') {
-            steps {
-                // Use bash explicitly to set Node.js version with nvm
-                sh '''
-                export NVM_DIR="$HOME/.nvm"
-                if [ ! -s "$NVM_DIR/nvm.sh" ]; then
-                    echo "Installing nvm..."
-                    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-                fi
-                bash -c "source $NVM_DIR/nvm.sh && \
-                echo Installing Node.js 14... && \
-                nvm install 14 && \
-                nvm use 14 && \
-                echo Using Node.js version: && \
-                node -v"
-                '''
-            }
-        }
+    steps {
+        // Use bash explicitly to set Node.js version with nvm
+        sh '''
+        export NVM_DIR="$HOME/.nvm"
+        if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+            echo "Installing nvm..."
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+        fi
+        bash -c "source $NVM_DIR/nvm.sh && \
+        echo Installing Node.js 10.9.2... && \
+        nvm install 10.9.2 && \
+        nvm use 10.9.2 && \
+        echo Using Node.js version: && \
+        node -v"
+        '''
+    }
+}
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'

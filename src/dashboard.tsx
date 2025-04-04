@@ -64,23 +64,11 @@ useEffect(() => {
     const currentTime = audioRef.current.currentTime;
     if (!isNaN(duration) && duration > 0) {
       setProgress((currentTime / duration) * 100);
-      setCurrentTime(currentTime);
-      setDuration(duration);
     }
   };
-
-  // Additional listener for when duration becomes available
-  const updateDuration = () => {
-    setDuration(audioRef.current.duration);
-  };
-
-  audioRef.current.addEventListener('timeupdate', updateProgress);
-  audioRef.current.addEventListener('loadedmetadata', updateDuration);
   
-  return () => {
-    audioRef.current.removeEventListener('timeupdate', updateProgress);
-    audioRef.current.removeEventListener('loadedmetadata', updateDuration);
-  };
+  audioRef.current.addEventListener('timeupdate', updateProgress);
+  return () => audioRef.current.removeEventListener('timeupdate', updateProgress);
 }, []);
   
   // Loading state
@@ -302,18 +290,7 @@ const refreshAudioFiles = () => {
 
   // Format time in MM:SS
 
-  useEffect(() => {
-    const updateProgress = () => {
-      const duration = audioRef.current.duration;
-      const currentTime = audioRef.current.currentTime;
-      if (!isNaN(duration) && duration > 0) {
-        setProgress((currentTime / duration) * 100);
-      }
-    };
-  
-    audioRef.current.addEventListener('timeupdate', updateProgress);
-    return () => audioRef.current.removeEventListener('timeupdate', updateProgress);
-  }, []);
+
 
   return (
     <Box sx={{ 

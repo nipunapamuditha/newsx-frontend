@@ -303,15 +303,6 @@ const refreshAudioFiles = () => {
   // Format time in MM:SS
 
   useEffect(() => {
-    if (audioFiles.length > 0 && audioFiles[currentTrack].url) {
-      audioRef.current.src = audioFiles[currentTrack].url;
-      if (isPlaying) {
-        audioRef.current.play();
-      }
-    }
-  }, [currentTrack, audioFiles]);
-
-  useEffect(() => {
     const updateProgress = () => {
       const duration = audioRef.current.duration;
       const currentTime = audioRef.current.currentTime;
@@ -319,7 +310,7 @@ const refreshAudioFiles = () => {
         setProgress((currentTime / duration) * 100);
       }
     };
-
+  
     audioRef.current.addEventListener('timeupdate', updateProgress);
     return () => audioRef.current.removeEventListener('timeupdate', updateProgress);
   }, []);

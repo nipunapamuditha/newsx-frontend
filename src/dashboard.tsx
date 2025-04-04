@@ -12,6 +12,8 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
+import PersonIcon from '@mui/icons-material/Person';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 // Define theme colors
 const themeColors = {
@@ -292,43 +294,39 @@ const refreshAudioFiles = () => {
       bgcolor: themeColors.lightGray
     }}>
       {/* App Bar */}
-      <AppBar position="static" elevation={0} sx={{ 
-        bgcolor: themeColors.white, 
-        borderBottom: `1px solid ${themeColors.secondary}`,
-        width: '100%'
-      }}>
-        <Toolbar>
-          <Typography variant="h6" sx={{ 
-            flexGrow: 1, 
-            color: themeColors.primary, 
-            fontWeight: 700 
-          }}>
-            AudioStream
-          </Typography>
-          <Button
-            onClick={() => handleNavigate('profile')}
-            sx={{
-              color: currentPage === 'profile' ? themeColors.primary : themeColors.textSecondary,
-              borderBottom: currentPage === 'profile' ? `2px solid ${themeColors.primary}` : 0,
-              mx: 1,
-              fontWeight: currentPage === 'profile' ? 500 : 400,
-            }}
-          >
-            Profile
-          </Button>
-          <Button
-            onClick={() => handleNavigate('dashboard')}
-            sx={{
-              color: currentPage === 'dashboard' ? themeColors.primary : themeColors.textSecondary,
-              borderBottom: currentPage === 'dashboard' ? `2px solid ${themeColors.primary}` : 0,
-              mx: 1,
-              fontWeight: currentPage === 'dashboard' ? 500 : 400,
-            }}
-          >
-            Dashboard
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <AppBar position="static" sx={{ bgcolor: '#1976d2', boxShadow: 2 }}>
+  <Toolbar>
+    <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+      <span style={{ color: 'white' }}>NEWS</span>
+      <span style={{ color: '#000000' }}>X</span>
+    </Typography>
+    <Button
+      startIcon={<PersonIcon />}
+      onClick={() => handleNavigate('profile')}
+      sx={{
+        color: 'white',
+        borderBottom: currentPage === 'profile' ? 2 : 0,
+        borderColor: 'white',
+        mx: 1,
+        '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' }
+      }}
+    >
+      Profile
+    </Button>
+    <Button
+      startIcon={<DashboardIcon />}
+      onClick={() => handleNavigate('dashboard')}
+      sx={{
+        color: 'white',
+        borderBottom: currentPage === 'dashboard' ? 2 : 0,
+        borderColor: 'white',
+        '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' }
+      }}
+    >
+      Dashboard
+    </Button>
+  </Toolbar>
+</AppBar>
 
       {/* Main Content */}
       <Container 

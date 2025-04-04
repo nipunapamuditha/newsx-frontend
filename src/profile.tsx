@@ -182,9 +182,10 @@ const Profile = () => {
       {/* Header */}
       <AppBar position="static" sx={{ bgcolor: '#1976d2', boxShadow: 2 }}>
         <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1, color: 'white', fontWeight: 'bold' }}>
-            NewsFeed
-          </Typography>
+        <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+  <span style={{ color: '#000000' }}>NEWS</span>
+  <span style={{ color: '#ffffff' }}>X</span>
+</Typography>
           <Button
             startIcon={<PersonIcon />}
             onClick={() => handleNavigate('profile')}

@@ -4,38 +4,60 @@ pipeline {
     }
     
     environment {
-        NVM_DIR = "${env.HOME}/.nvm"
-        PATH = "${env.NVM_DIR}/versions/node/v22.0.0/bin:${env.PATH}"
+        // Define NODE_VERSION explicitly
+        NODE_VERSION = "22"
+        // Use .nvm in the build workspace to ensure isolation
+        NVM_DIR = "${env.WORKSPACE}/.nvm"
     }
     
     stages {
+        stage('Setup Node.js') {
+            steps {
+                sh '''
+                # Create NVM directory if it doesn't exist
+                mkdir -p $NVM_DIR
+                
+                # Install nvm if not already installed
+                curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+                
+                # Clear any previous nvm setup in this workspace
+                export NVM_DIR="$WORKSPACE/.nvm"
+                if [ -s "$NVM_DIR/nvm.sh" ]; then
+                    . "$NVM_DIR/nvm.sh"
+                fi
+                
+                # Install and use Node.js 22
+                nvm install ${NODE_VERSION}
+                nvm alias default ${NODE_VERSION}
+                nvm use ${NODE_VERSION}
+                
+                # Verify setup
+                node -v
+                npm -v
+                
+                # Create a helper script that will be used in all subsequent stages
+                cat > $WORKSPACE/load-nvm.sh << 'EOL'
+#!/bin/bash
+export NVM_DIR="$WORKSPACE/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+nvm use default
+EOL
+                chmod +x $WORKSPACE/load-nvm.sh
+                '''
+            }
+        }
+        
         stage('Checkout') {
             steps {
                 git 'https://github.com/nipunapamuditha/newsx-frontend.git'
             }
         }
         
-        stage('Setup Node.js') {
-            steps {
-                sh '''
-                export NVM_DIR="$HOME/.nvm"
-                [ -s "$NVM_DIR/nvm.sh" ] || curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-                . "$NVM_DIR/nvm.sh"
-                nvm install 22
-                nvm alias default 22
-                nvm use default
-                node -v
-                npm -v
-                '''
-            }
-        }
-        
         stage('Install Dependencies') {
             steps {
                 sh '''
-                export NVM_DIR="$HOME/.nvm"
-                . "$NVM_DIR/nvm.sh"
-                nvm use default
+                . $WORKSPACE/load-nvm.sh
+                node -v
                 npm install
                 '''
             }
@@ -44,9 +66,8 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                export NVM_DIR="$HOME/.nvm"
-                . "$NVM_DIR/nvm.sh"
-                nvm use default
+                . $WORKSPACE/load-nvm.sh
+                node -v
                 npm run build
                 '''
             }
@@ -55,9 +76,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                export NVM_DIR="$HOME/.nvm"
-                . "$NVM_DIR/nvm.sh"
-                nvm use default
+                . $WORKSPACE/load-nvm.sh
                 npm test
                 '''
             }
@@ -67,10 +86,9 @@ pipeline {
             steps {
                 sshagent(['0ff14880-bcc6-4400-a835-a66a5a3cf0ba']) {
                     sh '''
-                    export NVM_DIR="$HOME/.nvm"
-                    . "$NVM_DIR/nvm.sh"
-                    nvm use default
-                    scp -r build/* jenkins@10.10.10.81:/home/jenkins/frontend
+                    . $WORKSPACE/load-nvm.sh
+                    # Note: Vite outputs to 'dist' not 'build'
+                    scp -r dist/* jenkins@10.10.10.81:/home/jenkins/frontend
                     '''
                 }
             }

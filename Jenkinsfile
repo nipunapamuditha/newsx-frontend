@@ -18,9 +18,9 @@ pipeline {
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
         fi
         bash -c "source $NVM_DIR/nvm.sh && \
-        echo Installing Node.js 10.9.2... && \
-        nvm install 10.9.2 && \
-        nvm use 10.9.2 && \
+        echo Installing Node.js 22... && \
+        nvm install 22 && \
+        nvm use 22 && \
         echo Using Node.js version: && \
         node -v"
         '''

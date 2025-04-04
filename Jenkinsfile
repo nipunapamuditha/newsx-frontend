@@ -2,53 +2,81 @@ pipeline {
     agent {
         label 'frontend-node'
     }
+    
+    environment {
+        NVM_DIR = "${env.HOME}/.nvm"
+        PATH = "${env.NVM_DIR}/versions/node/v22.0.0/bin:${env.PATH}"
+    }
+    
     stages {
         stage('Checkout') {
             steps {
                 git 'https://github.com/nipunapamuditha/newsx-frontend.git'
             }
         }
-        stage('Set Node.js Version') {
-    steps {
-        // Use bash explicitly to set Node.js version with nvm
-        sh '''
-        export NVM_DIR="$HOME/.nvm"
-        if [ ! -s "$NVM_DIR/nvm.sh" ]; then
-            echo "Installing nvm..."
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-        fi
-        bash -c "source $NVM_DIR/nvm.sh && \
-        echo Installing Node.js 22... && \
-        nvm install 22 && \
-        nvm use 22 && \
-        echo Using Node.js version: && \
-        node -v"
-        '''
-    }
-}
+        
+        stage('Setup Node.js') {
+            steps {
+                sh '''
+                export NVM_DIR="$HOME/.nvm"
+                [ -s "$NVM_DIR/nvm.sh" ] || curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+                . "$NVM_DIR/nvm.sh"
+                nvm install 22
+                nvm alias default 22
+                nvm use default
+                node -v
+                npm -v
+                '''
+            }
+        }
+        
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh '''
+                export NVM_DIR="$HOME/.nvm"
+                . "$NVM_DIR/nvm.sh"
+                nvm use default
+                npm install
+                '''
             }
         }
+        
         stage('Build') {
             steps {
-                sh 'npm run build'
+                sh '''
+                export NVM_DIR="$HOME/.nvm"
+                . "$NVM_DIR/nvm.sh"
+                nvm use default
+                npm run build
+                '''
             }
         }
+        
         stage('Test') {
             steps {
-                sh 'npm test'
+                sh '''
+                export NVM_DIR="$HOME/.nvm"
+                . "$NVM_DIR/nvm.sh"
+                nvm use default
+                npm test
+                '''
             }
         }
+        
         stage('Deploy') {
             steps {
                 sshagent(['0ff14880-bcc6-4400-a835-a66a5a3cf0ba']) {
-                    sh 'scp -r build/* jenkins@10.10.10.81:/home/jenkins/frontend'
+                    sh '''
+                    export NVM_DIR="$HOME/.nvm"
+                    . "$NVM_DIR/nvm.sh"
+                    nvm use default
+                    scp -r build/* jenkins@10.10.10.81:/home/jenkins/frontend
+                    '''
                 }
             }
         }
     }
+    
     post {
         success {
             echo 'Pipeline completed successfully!'

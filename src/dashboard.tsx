@@ -588,32 +588,31 @@ const refreshAudioFiles = () => {
                 width: '100%', 
                 alignItems: 'center' 
               }}>
-                <Typography variant="caption" sx={{ 
-                  width: 40, 
-                  textAlign: 'center',
-                  display: { xs: 'none', sm: 'block' }
-                }}>
-                  0:00
-                </Typography>
-                <Slider
-                  size="small"
-                  value={progress}
-                  onChange={handleProgressChange}
-                  disabled={audioFiles.length === 0 || !audioFiles[currentTrack].url}
-                  sx={{ 
-                    mx: { xs: 0, sm: 1 },
-                    color: audioFiles.length > 0 && audioFiles[currentTrack].url ? themeColors.primary : themeColors.textSecondary,
-                    '& .MuiSlider-thumb': {
-                      width: 12,
-                      height: 12,
-                    }
-                  }}
-                />
-             <Typography variant="caption">
+<Typography variant="caption" sx={{ 
+  width: 40, 
+  textAlign: 'center',
+  display: { xs: 'none', sm: 'block' }
+}}>
   {formatTime(currentTime)}
 </Typography>
-<Slider /* ... */ />
-<Typography variant="caption">
+<Slider
+  size="small"
+  value={progress}
+  onChange={handleProgressChange}
+  disabled={audioFiles.length === 0 || !audioFiles[currentTrack].url}
+  sx={{ 
+    mx: { xs: 0, sm: 1 },
+    color: audioFiles.length > 0 && audioFiles[currentTrack].url ? themeColors.primary : themeColors.textSecondary,
+    '& .MuiSlider-thumb': {
+      width: 12,
+      height: 12,
+    }
+  }}
+/>
+<Typography variant="caption" sx={{ 
+  width: 40, 
+  textAlign: 'center'
+}}>
   {formatTime(duration)}
 </Typography>
               </Box>

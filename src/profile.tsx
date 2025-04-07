@@ -23,6 +23,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SaveIcon from '@mui/icons-material/Save';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PersonIcon from '@mui/icons-material/Person';
+import newsxLogo from '/newxlogo.png';
 
 interface User {
   first_name: string;
@@ -182,10 +183,16 @@ const Profile = () => {
       {/* Header */}
       <AppBar position="static" sx={{ bgcolor: '#1976d2', boxShadow: 2 }}>
         <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
-  <span style={{ color: '#000000' }}>NEWS</span>
-  <span style={{ color: '#ffffff' }}>X</span>
-</Typography>
+        <Box sx={{ flexGrow: 1 }}>
+  <img 
+    src={newsxLogo} 
+    alt="NEWSX Logo" 
+    style={{ 
+      height: '32px', // Adjust height as needed
+      width: 'auto'
+    }} 
+  />
+</Box>
           <Button
             startIcon={<PersonIcon />}
             onClick={() => handleNavigate('profile')}

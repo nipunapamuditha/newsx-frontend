@@ -45,34 +45,86 @@ const Dashboard = () => {
   ]);
 
 
-  // Add these state variables
-const [currentTime, setCurrentTime] = useState(0);
-const [duration, setDuration] = useState(0);
-
-// Add this helper function
-const formatTime = (seconds: number) => {
-  if (isNaN(seconds)) return "0:00";
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = Math.floor(seconds % 60);
-  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-};
-
-// Update your updateProgress function in useEffect
-useEffect(() => {
-  const updateProgress = () => {
-    const duration = audioRef.current.duration;
-    const currentTime = audioRef.current.currentTime;
-    if (!isNaN(duration) && duration > 0) {
-      setProgress((currentTime / duration) * 100);
-    }
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  
+  // Add this helper function
+  const formatTime = (seconds: number) => {
+    if (isNaN(seconds)) return "0:00";
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
   
-  audioRef.current.addEventListener('timeupdate', updateProgress);
-  return () => audioRef.current.removeEventListener('timeupdate', updateProgress);
-}, []);
+  // Update your updateProgress function in useEffect
+  useEffect(() => {
+    const updateProgress = () => {
+      const audioDuration = audioRef.current.duration;
+      const audioCurrentTime = audioRef.current.currentTime;
+      
+      setCurrentTime(audioCurrentTime || 0);
+      setDuration(audioDuration || 0);
+      
+      if (!isNaN(audioDuration) && audioDuration > 0) {
+        setProgress((audioCurrentTime / audioDuration) * 100);
+      }
+    };
+    
+    audioRef.current.addEventListener('timeupdate', updateProgress);
+    return () => audioRef.current.removeEventListener('timeupdate', updateProgress);
+  }, []);
   
   // Loading state
   const [isLoadingAudio, setIsLoadingAudio] = useState(true);
+
+  useEffect(() => {
+    if (audioFiles.length === 0 || !audioFiles[currentTrack] || !audioFiles[currentTrack].url) {
+      return;
+    }
+    
+    // Set the new audio source
+    audioRef.current.src = audioFiles[currentTrack].url;
+    
+    // Load the audio
+    audioRef.current.load();
+    
+    // Reset states
+    setProgress(0);
+    setCurrentTime(0);
+    setDuration(0);
+    
+    // Set volume
+    audioRef.current.volume = volume / 100;
+    
+    // Play if isPlaying is true
+    if (isPlaying) {
+      // Wrap in try/catch to handle any play errors
+      try {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.error("Error playing audio:", error);
+            setIsPlaying(false);
+          });
+        }
+      } catch (error) {
+        console.error("Error playing audio:", error);
+        setIsPlaying(false);
+      }
+    }
+    
+  }, [currentTrack, audioFiles, isPlaying, volume]);
+
+  const handleProgressChange = (_event: Event, newValue: number | number[]) => {
+    if (typeof newValue === 'number') {
+      setProgress(newValue);
+      const audioDuration = audioRef.current.duration;
+      if (!isNaN(audioDuration) && audioDuration > 0 && audioRef.current.src) {
+        audioRef.current.currentTime = (newValue / 100) * audioDuration;
+      }
+    }
+  };
+
 
   // Fetch audio files when component mounts
   useEffect(() => {
@@ -272,13 +324,6 @@ const refreshAudioFiles = () => {
     if (!audioFiles[index].url) return; // Don't select invalid tracks
     setCurrentTrack(index);
     setIsPlaying(true);
-  };
-
-  const handleProgressChange = (_event: Event, newValue: number | number[]) => {
-    if (typeof newValue === 'number') {
-      setProgress(newValue);
-      audioRef.current.currentTime = (newValue / 100) * audioRef.current.duration;
-    }
   };
   
   const handleVolumeChange = (_event: Event, newValue: number | number[]) => {

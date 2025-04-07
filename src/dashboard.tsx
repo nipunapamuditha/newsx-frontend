@@ -14,6 +14,8 @@ import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import PersonIcon from '@mui/icons-material/Person';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import newsxLogo from '/newxlogo.png';
 
 // Define theme colors
@@ -49,6 +51,10 @@ const Dashboard = () => {
   const [duration, setDuration] = useState(0);
   const [isLoadingAudio, setIsLoadingAudio] = useState(true);
   const [isAudioReady, setIsAudioReady] = useState(false);
+  
+  // State for tracking file deletion
+  const [deletingFiles, setDeletingFiles] = useState<Set<string>>(new Set());
+  const [deletedFiles, setDeletedFiles] = useState<Set<string>>(new Set());
   
   // Format time in MM:SS with safety checks
   const formatTime = (seconds: number) => {
@@ -333,6 +339,63 @@ const Dashboard = () => {
     });
   };
 
+  // Delete audio file handler
+  const handleDeleteAudio = (objectName: string, event: React.MouseEvent) => {
+    // Prevent click event from bubbling up to parent (track selection)
+    event.stopPropagation();
+    
+    // Add file to deleting state
+    setDeletingFiles(prev => new Set(prev).add(objectName));
+    
+    fetch('https://newsxapi.newsloop.xyz/v1/delete_audiofile', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ object_name: objectName }),
+      credentials: 'include',
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to delete audio file');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Mark as successfully deleted
+      setDeletedFiles(prev => new Set(prev).add(objectName));
+      
+      // Remove from deleting state
+      setDeletingFiles(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(objectName);
+        return newSet;
+      });
+      
+      // Refresh audio files list
+      refreshAudioFiles();
+      
+      // Remove success indicator after 3 seconds
+      setTimeout(() => {
+        setDeletedFiles(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(objectName);
+          return newSet;
+        });
+      }, 3000);
+    })
+    .catch(error => {
+      console.error('Error deleting audio file:', error);
+      
+      // Remove from deleting state on error
+      setDeletingFiles(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(objectName);
+        return newSet;
+      });
+    });
+  };
+
   // Extract the refresh logic to a separate function
   const refreshAudioFiles = () => {
     fetch('https://newsxapi.newsloop.xyz/v1/getaudio_files', {
@@ -481,16 +544,16 @@ const Dashboard = () => {
       {/* App Bar */}
       <AppBar position="static" sx={{ bgcolor: '#1976d2', boxShadow: 2 }}>
         <Toolbar>
-        <Box sx={{ flexGrow: 1 }}>
-  <img 
-    src={newsxLogo} 
-    alt="NEWSX Logo" 
-    style={{ 
-      height: '43px', // Adjust height as needed
-      width: 'auto'
-    }} 
-  />
-</Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <img 
+              src={newsxLogo} 
+              alt="NEWSX Logo" 
+              style={{ 
+                height: '43px', // Adjust height as needed
+                width: 'auto'
+              }} 
+            />
+          </Box>
           <Button
             startIcon={<PersonIcon />}
             onClick={() => handleNavigate('profile')}
@@ -554,7 +617,13 @@ const Dashboard = () => {
             </Box>
           ) : (
             <List sx={{ width: '100%' }}>
-              {audioFiles.map((track, index) => (
+              {audioFiles.map((track, index) => {
+                // Extract object name from the URL
+                const urlParts = track.url.split('/');
+                const objectName = urlParts.length >= 2 ? 
+                  `${urlParts[urlParts.length - 2]}/${urlParts[urlParts.length - 1].split('?')[0]}` : '';
+                
+                return (
                 <React.Fragment key={index}>
                   <ListItem 
                     disablePadding
@@ -614,6 +683,34 @@ const Dashboard = () => {
                             Now Playing
                           </Typography>
                         )}
+                        
+                        {/* Delete Button with Status Icons */}
+                        {track.url && (
+                          <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center' }}>
+                            {deletedFiles.has(objectName) && (
+                              <CheckCircleIcon 
+                                fontSize="small" 
+                                sx={{ color: 'success.main', mr: 1 }} 
+                              />
+                            )}
+                            <IconButton 
+                              size="small"
+                              onClick={(e) => handleDeleteAudio(objectName, e)}
+                              disabled={deletingFiles.has(objectName)}
+                              sx={{ 
+                                color: deletingFiles.has(objectName) 
+                                  ? 'text.disabled' 
+                                  : 'error.main'
+                              }}
+                            >
+                              {deletingFiles.has(objectName) ? (
+                                <CircularProgress size={16} color="inherit" />
+                              ) : (
+                                <DeleteIcon fontSize="small" />
+                              )}
+                            </IconButton>
+                          </Box>
+                        )}
                       </Box>
                     </ListItemButton>
                   </ListItem>
@@ -621,7 +718,7 @@ const Dashboard = () => {
                     <Divider variant="inset" component="li" />
                   )}
                 </React.Fragment>
-              ))}
+              )})}
             </List>
           )}
           

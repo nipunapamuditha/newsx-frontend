@@ -127,6 +127,7 @@ const Profile = () => {
       }
     } catch (error) {
       console.error('Error searching:', error);
+      navigate('/'); // Redirect to login if there's an error
     }
   };
 

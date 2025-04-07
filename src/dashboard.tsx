@@ -120,10 +120,16 @@ const Dashboard = () => {
       setProgress(newValue);
       const audioDuration = audioRef.current.duration;
       if (!isNaN(audioDuration) && audioDuration > 0 && audioRef.current.src) {
-        audioRef.current.currentTime = (newValue / 100) * audioDuration;
+        // Calculate the new time, and ensure it's finite before setting
+        const newTime = (newValue / 100) * audioDuration;
+        if (isFinite(newTime)) {
+          audioRef.current.currentTime = newTime;
+        }
       }
     }
   };
+
+
 
 
   // Fetch audio files when component mounts

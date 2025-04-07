@@ -215,6 +215,7 @@ const Dashboard = () => {
     })
       .then(response => {
         if (!response.ok) {
+          navigate('/'); // Redirect to login if not authenticated
           throw new Error('Network response was not ok');
         }
         return response.json();

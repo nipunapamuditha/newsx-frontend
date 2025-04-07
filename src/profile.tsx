@@ -305,146 +305,152 @@ const Profile = () => {
               </Grid>
 
               {/* Preferences Panel */}
-              <Grid item xs={12} md={4}>
-                <Paper 
-                  elevation={0}
-                  sx={{ 
-                    p: 4, 
-                    bgcolor: '#fff',
-                    height: '100%',
-                    borderRadius: 2,
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-                  }}
-                >
-                  <Typography variant="h6" fontWeight="bold" color="#1976d2" gutterBottom>
-                    Manage Preferences
-                  </Typography>
-                  <Divider sx={{ mb: 3 }} />
-                  
-                  {/* Search Box */}
-                  <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
-                    <TextField
-                      fullWidth
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      placeholder="Add new preference..."
-                      size="small"
-                      InputProps={{
-                        startAdornment: <SearchIcon color="action" sx={{ mr: 1 }} />,
-                      }}
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          borderRadius: 2,
-                          '&.Mui-focused fieldset': {
-                            borderColor: '#1976d2',
-                          },
-                        }
-                      }}
-                    />
-                    <Button
-                      variant="contained"
-                      onClick={handleSearch}
-                      sx={{
-                        bgcolor: '#1976d2',
-                        '&:hover': { bgcolor: '#1565c0' },
-                        borderRadius: 2,
-                        minWidth: '80px',
-                      }}
-                    >
-                      Add
-                    </Button>
-                  </Box>
+              {/* Preferences Panel */}
+<Grid item xs={12} md={4}>
+  <Paper 
+    elevation={2} // Slight elevation for better visibility
+    sx={{ 
+      p: 4, 
+      bgcolor: '#f9f9f9', // Light background for distinction
+      height: '100%',
+      borderRadius: 2,
+      boxShadow: '0 4px 12px rgba(0,0,0,0.1)', // Subtle shadow for elegance
+    }}
+  >
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+      <DashboardIcon color="primary" />
+      <Typography variant="h6" fontWeight="bold" color="#1976d2">
+        Manage Preferences
+      </Typography>
+    </Box>
+    <Divider sx={{ mb: 3 }} />
+    
+    {/* Search Box */}
+    <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
+      <TextField
+        fullWidth
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        onKeyPress={handleKeyPress}
+        placeholder="Add new preference..."
+        size="small"
+        InputProps={{
+          startAdornment: <SearchIcon color="action" sx={{ mr: 1 }} />,
+        }}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            borderRadius: 2,
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)', // Subtle shadow
+            '&.Mui-focused fieldset': {
+              borderColor: '#1976d2',
+            },
+          },
+        }}
+      />
+      <Button
+        variant="contained"
+        onClick={handleSearch}
+        sx={{
+          bgcolor: '#1976d2',
+          '&:hover': { bgcolor: '#1565c0' },
+          borderRadius: 2,
+          minWidth: '80px',
+        }}
+      >
+        Add
+      </Button>
+    </Box>
 
-                  {/* Selected Items */}
-                  <Typography variant="subtitle2" fontWeight="medium" gutterBottom>
-                    Your Selected Preferences:
-                  </Typography>
-                  <Box 
-                    sx={{ 
-                      mb: 3,
-                      maxHeight: 240,
-                      overflow: 'auto',
-                      borderRadius: 1,
-                      p: selectedItems.length > 0 ? 1 : 0,
-                      border: selectedItems.length > 0 ? '1px solid #e0e0e0' : 'none',
-                    }}
-                  >
-                    {selectedItems.length === 0 ? (
-                      <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: 'center' }}>
-                        No preferences selected yet
-                      </Typography>
-                    ) : (
-                      selectedItems.map((item) => (
-                        <Box
-                          key={item.id}
-                          sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            p: 1.5,
-                            mb: 1,
-                            bgcolor: item.isAutoFilled ? 'rgba(25, 118, 210, 0.08)' : 'white',
-                            borderRadius: 1,
-                            border: '1px solid',
-                            borderColor: item.isAutoFilled ? 'rgba(25, 118, 210, 0.3)' : '#e0e0e0',
-                            transition: 'all 0.2s ease',
-                            '&:hover': {
-                              boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-                              borderColor: item.isAutoFilled ? 'rgba(25, 118, 210, 0.5)' : '#bdbdbd',
-                            }
-                          }}
-                        >
-                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Chip 
-                              size="small" 
-                              label={item.name} 
-                              color={item.isAutoFilled ? "primary" : "default"}
-                              variant={item.isAutoFilled ? "filled" : "outlined"}
-                              sx={{ mr: 1 }}
-                            />
-                          </Box>
-                          <Tooltip title="Remove preference">
-                            <IconButton 
-                              size="small" 
-                              onClick={() => removeSelection(item.id)}
-                              color="error"
-                              sx={{ 
-                                opacity: 0.7, 
-                                '&:hover': { opacity: 1 } 
-                              }}
-                            >
-                              <DeleteOutlineIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                        </Box>
-                      ))
-                    )}
-                  </Box>
+    {/* Selected Items */}
+    <Typography variant="subtitle2" fontWeight="medium" gutterBottom>
+      Your Selected Preferences:
+    </Typography>
+    <Box 
+      sx={{ 
+        mb: 3,
+        maxHeight: 240,
+        overflow: 'auto',
+        borderRadius: 1,
+        p: selectedItems.length > 0 ? 1 : 0,
+        border: selectedItems.length > 0 ? '1px solid #e0e0e0' : 'none',
+        bgcolor: selectedItems.length > 0 ? '#ffffff' : 'transparent',
+      }}
+    >
+      {selectedItems.length === 0 ? (
+        <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: 'center' }}>
+          No preferences selected yet
+        </Typography>
+      ) : (
+        selectedItems.map((item) => (
+          <Box
+            key={item.id}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              p: 1.5,
+              mb: 1,
+              bgcolor: item.isAutoFilled ? 'rgba(25, 118, 210, 0.08)' : 'white',
+              borderRadius: 1,
+              border: '1px solid',
+              borderColor: item.isAutoFilled ? 'rgba(25, 118, 210, 0.3)' : '#e0e0e0',
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                borderColor: item.isAutoFilled ? 'rgba(25, 118, 210, 0.5)' : '#bdbdbd',
+              },
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Chip 
+                size="small" 
+                label={item.name} 
+                color={item.isAutoFilled ? "primary" : "default"}
+                variant={item.isAutoFilled ? "filled" : "outlined"}
+                sx={{ mr: 1 }}
+              />
+            </Box>
+            <Tooltip title="Remove preference">
+              <IconButton 
+                size="small" 
+                onClick={() => removeSelection(item.id)}
+                color="error"
+                sx={{ 
+                  opacity: 0.7, 
+                  '&:hover': { opacity: 1 } 
+                }}
+              >
+                <DeleteOutlineIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        ))
+      )}
+    </Box>
 
-                  {/* Submit Button */}
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    startIcon={<SaveIcon />}
-                    onClick={handleSubmitSelections}
-                    sx={{
-                      bgcolor: '#1976d2',
-                      '&:hover': { bgcolor: '#1565c0' },
-                      borderRadius: 2,
-                      py: 1.5,
-                      fontWeight: 'bold',
-                      boxShadow: '0 2px 8px rgba(25, 118, 210, 0.3)',
-                      transition: 'all 0.2s ease',
-                      '&:active': {
-                        transform: 'scale(0.98)',
-                      }
-                    }}
-                  >
-                    Save Preferences
-                  </Button>
-                </Paper>
-              </Grid>
+    {/* Submit Button */}
+    <Button
+      variant="contained"
+      fullWidth
+      startIcon={<SaveIcon />}
+      onClick={handleSubmitSelections}
+      sx={{
+        bgcolor: '#1976d2',
+        '&:hover': { bgcolor: '#1565c0' },
+        borderRadius: 2,
+        py: 1.5,
+        fontWeight: 'bold',
+        boxShadow: '0 2px 8px rgba(25, 118, 210, 0.3)',
+        transition: 'all 0.2s ease',
+        '&:active': {
+          transform: 'scale(0.98)',
+        },
+      }}
+    >
+      Save Preferences
+    </Button>
+  </Paper>
+</Grid>
             </Grid>
           </Container>
         ) : (

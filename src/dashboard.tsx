@@ -23,6 +23,7 @@ import {
   Tooltip,
   useMediaQuery,
   useTheme,
+  alpha,
 } from "@mui/material"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import PauseIcon from "@mui/icons-material/Pause"
@@ -37,23 +38,28 @@ import DashboardIcon from "@mui/icons-material/Dashboard"
 import DeleteIcon from "@mui/icons-material/Delete"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
+import HeadphonesIcon from "@mui/icons-material/Headphones"
+import MoreVertIcon from "@mui/icons-material/MoreVert"
 import newsxLogo from "/newxlogo.png"
 
-// Define theme colors
+// Define theme colors - Updated with a more modern palette
 const themeColors = {
-  primary: "#2196f3", // Blue
-  primaryLight: "#bbdefb", // Lighter blue for hover states
-  primaryDark: "#1565c0", // Darker blue for active states
-  secondary: "#e3f2fd", // Light Blue
+  primary: "#4361ee", // Modern blue
+  primaryLight: "#d8e1ff", // Lighter blue for hover states
+  primaryDark: "#3a56d4", // Darker blue for active states
+  secondary: "#edf2ff", // Light Blue background
   white: "#ffffff",
-  lightGray: "#f5f5f5",
-  mediumGray: "#eeeeee",
-  textPrimary: "#333333",
-  textSecondary: "#757575",
-  success: "#4caf50",
-  error: "#f44336",
-  warning: "#ff9800",
-  divider: "#e0e0e0",
+  lightGray: "#f8fafc", // Lighter background
+  mediumGray: "#eef2f6",
+  textPrimary: "#1e293b", // Darker text for better contrast
+  textSecondary: "#64748b", // Modern secondary text
+  success: "#10b981", // Modern green
+  error: "#ef4444", // Modern red
+  warning: "#f59e0b", // Modern orange
+  divider: "#e2e8f0",
+  background: "#f1f5f9", // Subtle background
+  cardShadow: "0 4px 20px rgba(0, 0, 0, 0.05)", // Soft shadow for cards
+  playerGradient: "linear-gradient(135deg, #4361ee 0%, #3a56d4 100%)",
 }
 
 const Dashboard = () => {
@@ -585,370 +591,499 @@ const Dashboard = () => {
   }
 
   return (
-    <Box sx={{ 
-      display: 'flex', 
-      flexDirection: 'column',
-      minHeight: '100vh',
-      width: '100%',
-      bgcolor: themeColors.lightGray,
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    }}>
-      {/* App Bar */}
-      <AppBar 
-        position="static" 
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        width: "100%",
+        bgcolor: themeColors.background,
+        fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+      }}
+    >
+      {/* App Bar - Modernized with gradient and better spacing */}
+      <AppBar
+        position="static"
         elevation={0}
-        sx={{ 
-          bgcolor: themeColors.primary, 
-          borderBottom: `1px solid ${themeColors.primaryDark}`,
+        sx={{
+          background: themeColors.playerGradient,
+          borderBottom: "none",
         }}
       >
-        <Toolbar sx={{ height: 64 }}>
-          <Box sx={{ 
-            flexGrow: 1, 
-            display: 'flex', 
-            alignItems: 'center' 
-          }}>
-            <img 
-              src={newsxLogo || "/placeholder.svg"} 
-              alt="NEWSX Logo" 
-              style={{ 
-                height: '43px',
-                width: 'auto',
-                marginRight: '16px'
-              }} 
+        <Toolbar sx={{ height: 70, px: { xs: 2, sm: 4 } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={newsxLogo || "/placeholder.svg"}
+              alt="NEWSX Logo"
+              style={{
+                height: "43px",
+                width: "auto",
+                marginRight: "16px",
+              }}
             />
-            <Typography 
-              variant="h6" 
-              sx={{ 
-                display: { xs: 'none', sm: 'block' },
-                fontWeight: 500,
-                letterSpacing: '0.5px'
+            <Typography
+              variant="h6"
+              sx={{
+                display: { xs: "none", sm: "block" },
+                fontWeight: 600,
+                letterSpacing: "0.5px",
               }}
             >
               Audio Dashboard
             </Typography>
           </Box>
-          <Button
-            startIcon={<PersonIcon />}
-            onClick={() => handleNavigate('profile')}
-            sx={{
-              color: 'white',
-              borderBottom: currentPage === 'profile' ? 2 : 0,
-              borderColor: 'white',
-              mx: 1,
-              borderRadius: '4px',
-              py: 1,
-              px: 2,
-              '&:hover': { 
-                bgcolor: 'rgba(255,255,255,0.1)',
-                transition: 'background-color 0.3s'
-              }
-            }}
-          >
-            Profile
-          </Button>
-          <Button
-            startIcon={<DashboardIcon />}
-            onClick={() => handleNavigate('dashboard')}
-            sx={{
-              color: 'white',
-              borderBottom: currentPage === 'dashboard' ? 2 : 0,
-              borderColor: 'white',
-              borderRadius: '4px',
-              py: 1,
-              px: 2,
-              '&:hover': { 
-                bgcolor: 'rgba(255,255,255,0.1)',
-                transition: 'background-color 0.3s'
-              }
-            }}
-          >
-            Dashboard
-          </Button>
+
+          {/* Navigation buttons with improved styling */}
+          <Box sx={{ display: "flex", gap: { xs: 1, sm: 2 } }}>
+            <Button
+              startIcon={<PersonIcon />}
+              onClick={() => handleNavigate("profile")}
+              sx={{
+                color: "white",
+                position: "relative",
+                borderRadius: "8px",
+                py: 1,
+                px: { xs: 1.5, sm: 2 },
+                "&:hover": {
+                  bgcolor: "rgba(255,255,255,0.15)",
+                  transition: "background-color 0.3s",
+                },
+                "&::after": currentPage === "profile" ? {
+                  content: '""',
+                  position: "absolute",
+                  bottom: "6px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "20px",
+                  height: "3px",
+                  bgcolor: "white",
+                  borderRadius: "10px",
+                } : {},
+              }}
+            >
+              <Typography sx={{ display: { xs: "none", sm: "block" }, ml: 0.5 }}>Profile</Typography>
+              {isMobile && <PersonIcon />}
+            </Button>
+            <Button
+              startIcon={<DashboardIcon />}
+              onClick={() => handleNavigate("dashboard")}
+              sx={{
+                color: "white",
+                position: "relative",
+                borderRadius: "8px",
+                py: 1,
+                px: { xs: 1.5, sm: 2 },
+                "&:hover": {
+                  bgcolor: "rgba(255,255,255,0.15)",
+                  transition: "background-color 0.3s",
+                },
+                "&::after": currentPage === "dashboard" ? {
+                  content: '""',
+                  position: "absolute",
+                  bottom: "6px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "20px",
+                  height: "3px",
+                  bgcolor: "white",
+                  borderRadius: "10px",
+                } : {},
+              }}
+            >
+              <Typography sx={{ display: { xs: "none", sm: "block" }, ml: 0.5 }}>Dashboard</Typography>
+              {isMobile && <DashboardIcon />}
+            </Button>
+          </Box>
         </Toolbar>
       </AppBar>
 
-      {/* Main Content */}
-      <Container 
-        maxWidth={false} 
-        sx={{ 
-          pt: 4, 
+      {/* Main Content - Improved spacing and layout */}
+      <Container
+        maxWidth={false}
+        sx={{
+          pt: 4,
           pb: { xs: 15, sm: 10 },
           px: { xs: 2, sm: 3, md: 4 },
           flex: 1,
-          overflow: 'auto',
-          width: '100%'
+          overflow: "auto",
+          width: "100%",
         }}
       >
-        {/* Playlist Section */}
-        <Paper 
-          elevation={0} 
-          sx={{ 
-            p: { xs: 2, sm: 3 }, 
+        {/* Generate Now Button - Standalone card for better visibility */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 3, sm: 4 },
+            mb: 4,
             bgcolor: themeColors.white,
-            borderRadius: 2,
-            border: `1px solid ${themeColors.divider}`,
-            height: '100%',
-            minHeight: '70vh',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
+            borderRadius: "16px",
+            boxShadow: themeColors.cardShadow,
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
+            position: "relative",
+            overflow: "hidden",
           }}
         >
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            mb: 3,
-            borderBottom: `1px solid ${themeColors.divider}`,
-            pb: 2
-          }}>
-            <Typography 
-              variant="h5" 
-              sx={{ 
-                color: themeColors.textPrimary, 
-                fontWeight: 600,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1
-              }}
-            >
-              <MusicNoteIcon color="primary" />
-              Your Playlist
-            </Typography>
-            
-            {/* Generate Now Button - Moved to header */}
-            <Button
-              variant="contained"
-              onClick={handleGenerateNow}
-              startIcon={isGenerating ? 
-                <CircularProgress size={20} color="inherit" /> : 
-                <AutorenewIcon />
-              }
+          {/* Decorative background element */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: -50,
+              right: -50,
+              width: 200,
+              height: 200,
+              borderRadius: "50%",
+              background: `radial-gradient(circle at top right, ${alpha(themeColors.primary, 0.1)}, transparent 70%)`,
+              zIndex: 0,
+            }}
+          />
+
+          <Box sx={{ position: "relative", zIndex: 1 }}>
+            <Typography
+              variant="h5"
               sx={{
-                bgcolor: isGenerating ? themeColors.secondary : themeColors.primary,
-                color: isGenerating ? themeColors.primary : themeColors.white,
-                '&:hover': {
-                  bgcolor: isGenerating ? themeColors.secondary : themeColors.primaryDark,
-                  transition: 'background-color 0.3s'
-                },
-                textTransform: 'none',
-                fontWeight: 500,
-                px: 3,
-                py: 1,
-                borderRadius: 2,
-                boxShadow: isGenerating ? 'none' : '0 2px 5px rgba(0,0,0,0.1)',
+                fontWeight: 600,
+                color: themeColors.textPrimary,
+                mb: 1,
               }}
             >
-              {generationStatus}
-            </Button>
+              Generate New Audio
+            </Typography>
+            <Typography variant="body1" color="textSecondary">
+              Create a new audio file based on your preferences
+            </Typography>
           </Box>
-          
+
+          <Button
+            variant="contained"
+            onClick={handleGenerateNow}
+            startIcon={isGenerating ? <CircularProgress size={20} color="inherit" /> : <AutorenewIcon />}
+            sx={{
+              background: isGenerating ? alpha(themeColors.primary, 0.1) : themeColors.playerGradient,
+              color: isGenerating ? themeColors.primary : themeColors.white,
+              "&:hover": {
+                background: isGenerating ? alpha(themeColors.primary, 0.1) : themeColors.primaryDark,
+              },
+              textTransform: "none",
+              fontWeight: 600,
+              px: 4,
+              py: 1.5,
+              borderRadius: "10px",
+              boxShadow: isGenerating ? "none" : `0 4px 14px ${alpha(themeColors.primary, 0.3)}`,
+              minWidth: { xs: "100%", sm: "200px" },
+              zIndex: 1,
+              transition: "all 0.2s",
+              "&:active": {
+                transform: "scale(0.98)",
+              },
+            }}
+          >
+            {generationStatus}
+          </Button>
+        </Paper>
+
+        {/* Playlist Section - Enhanced with modern styling */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 3, sm: 4 },
+            bgcolor: themeColors.white,
+            borderRadius: "16px",
+            height: "100%",
+            minHeight: "60vh",
+            boxShadow: themeColors.cardShadow,
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 3,
+              pb: 2,
+              borderBottom: `1px solid ${themeColors.divider}`,
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                color: themeColors.textPrimary,
+                fontWeight: 600,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <HeadphonesIcon sx={{ color: themeColors.primary }} />
+              Your Audio Library
+            </Typography>
+
+            <Typography variant="body2" color="textSecondary">
+              {audioFiles.length > 0 && audioFiles[0].url
+                ? `${audioFiles.length} audio file${audioFiles.length !== 1 ? "s" : ""}`
+                : "No files"}
+            </Typography>
+          </Box>
+
           {/* Track List Header */}
           {!isLoadingAudio && audioFiles.length > 0 && audioFiles[0].url && (
-            <Box sx={{ 
-              px: 2, 
-              py: 1, 
-              bgcolor: themeColors.mediumGray,
-              borderRadius: 1,
-              mb: 1,
-              display: { xs: 'none', sm: 'flex' }
-            }}>
-              <Typography sx={{ width: '50px', fontWeight: 500 }}>#</Typography>
-              <Typography sx={{ flex: 1, fontWeight: 500 }}>Title</Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', width: '100px' }}>
-                <AccessTimeIcon fontSize="small" sx={{ mr: 1 }} />
-                <Typography sx={{ fontWeight: 500 }}>Duration</Typography>
+            <Box
+              sx={{
+                px: 3,
+                py: 1.5,
+                bgcolor: themeColors.lightGray,
+                borderRadius: "10px",
+                mb: 2,
+                display: { xs: "none", sm: "flex" },
+                alignItems: "center",
+              }}
+            >
+              <Typography sx={{ width: "50px", fontWeight: 600, color: themeColors.textSecondary }}>#</Typography>
+              <Typography sx={{ flex: 1, fontWeight: 600, color: themeColors.textSecondary }}>Title</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", width: "100px" }}>
+                <AccessTimeIcon fontSize="small" sx={{ mr: 1, color: themeColors.textSecondary }} />
+                <Typography sx={{ fontWeight: 600, color: themeColors.textSecondary }}>Duration</Typography>
               </Box>
-              <Typography sx={{ width: '50px' }}></Typography>
+              <Typography sx={{ width: "50px" }}></Typography>
             </Box>
           )}
-          
+
           {isLoadingAudio ? (
-            <Box sx={{ 
-              display: 'flex', 
-              justifyContent: 'center', 
-              alignItems: 'center', 
-              my: 8,
-              flexDirection: 'column',
-              gap: 2
-            }}>
-              <CircularProgress size={40} />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                my: 8,
+                flexDirection: "column",
+                gap: 2,
+              }}
+            >
+              <CircularProgress size={40} sx={{ color: themeColors.primary }} />
               <Typography variant="body1" color="textSecondary">
                 Loading your audio files...
               </Typography>
             </Box>
           ) : (
-            <List sx={{ 
-              width: '100%',
-              maxHeight: '60vh',
-              overflow: 'auto',
-              '&::-webkit-scrollbar': {
-                width: '8px',
-              },
-              '&::-webkit-scrollbar-track': {
-                background: themeColors.lightGray,
-                borderRadius: '10px',
-              },
-              '&::-webkit-scrollbar-thumb': {
-                background: themeColors.mediumGray,
-                borderRadius: '10px',
-                '&:hover': {
-                  background: themeColors.textSecondary,
+            <List
+              sx={{
+                width: "100%",
+                maxHeight: "60vh",
+                overflow: "auto",
+                "&::-webkit-scrollbar": {
+                  width: "6px",
                 },
-              },
-            }}>
+                "&::-webkit-scrollbar-track": {
+                  background: themeColors.lightGray,
+                  borderRadius: "10px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  background: alpha(themeColors.primary, 0.2),
+                  borderRadius: "10px",
+                  "&:hover": {
+                    background: alpha(themeColors.primary, 0.4),
+                  },
+                },
+              }}
+            >
               {audioFiles.length === 0 || !audioFiles[0].url ? (
-                <Box sx={{ 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  py: 8,
-                  gap: 2
-                }}>
-                  <MusicNoteIcon sx={{ fontSize: 60, color: themeColors.textSecondary, opacity: 0.5 }} />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    py: 8,
+                    gap: 2,
+                  }}
+                >
+                  <HeadphonesIcon sx={{ fontSize: 60, color: themeColors.textSecondary, opacity: 0.5 }} />
                   <Typography variant="h6" color="textSecondary">
                     No Audio Files Available
                   </Typography>
                   <Typography variant="body2" color="textSecondary" align="center">
-                    Click the "Generate Now" button to create your first audio file.
+                    Click the "Generate New Audio" button to create your first audio file.
                   </Typography>
                 </Box>
               ) : (
                 audioFiles.map((track, index) => {
                   // Extract object name from the URL
-                  const urlParts = track.url.split('/');
-                  const objectName = urlParts.length >= 2 ? 
-                    `${urlParts[urlParts.length - 2]}/${urlParts[urlParts.length - 1].split('?')[0]}` : '';
-                  
+                  const urlParts = track.url.split("/")
+                  const objectName =
+                    urlParts.length >= 2
+                      ? `${urlParts[urlParts.length - 2]}/${urlParts[urlParts.length - 1].split("?")[0]}`
+                      : ""
+
                   return (
                     <React.Fragment key={index}>
-                      <ListItem 
+                      <ListItem
                         disablePadding
-                        sx={{ 
-                          mb: 0.5,
-                          bgcolor: currentTrack === index ? themeColors.secondary : 'transparent',
-                          borderRadius: 1,
+                        sx={{
+                          mb: 1,
+                          bgcolor: currentTrack === index ? alpha(themeColors.primary, 0.05) : "transparent",
+                          borderRadius: "12px",
                           opacity: track.url ? 1 : 0.6,
-                          transition: 'background-color 0.2s',
-                          '&:hover': {
-                            bgcolor: currentTrack === index ? themeColors.secondary : themeColors.lightGray,
-                          }
+                          transition: "all 0.2s",
+                          "&:hover": {
+                            bgcolor: currentTrack === index ? alpha(themeColors.primary, 0.08) : themeColors.lightGray,
+                            transform: "translateY(-2px)",
+                            boxShadow: "0 4px 12px rgba(0,0,0,0.03)",
+                          },
                         }}
                       >
-                        <ListItemButton 
+                        <ListItemButton
                           onClick={() => handleTrackSelect(index)}
                           disabled={!track.url}
-                          sx={{ 
-                            borderRadius: 1,
-                            py: 1.5,
-                            px: 2,
+                          sx={{
+                            borderRadius: "12px",
+                            py: 2,
+                            px: 3,
                           }}
                         >
-                          <Box sx={{ 
-                            display: 'flex', 
-                            width: '100%',
-                            alignItems: 'center',
-                          }}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              width: "100%",
+                              alignItems: "center",
+                            }}
+                          >
                             {/* Track Number/Play Icon */}
-                            <Box sx={{ 
-                              width: '50px', 
-                              display: 'flex', 
-                              alignItems: 'center',
-                              justifyContent: 'center'
-                            }}>
+                            <Box
+                              sx={{
+                                width: "50px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
                               {currentTrack === index && isPlaying ? (
-                                <Avatar 
-                                  sx={{ 
-                                    bgcolor: themeColors.primary, 
-                                    width: 36, 
+                                <Avatar
+                                  sx={{
+                                    background: themeColors.playerGradient,
+                                    width: 36,
                                     height: 36,
+                                    boxShadow: `0 4px 10px ${alpha(themeColors.primary, 0.3)}`,
                                   }}
                                 >
                                   <PauseIcon fontSize="small" />
                                 </Avatar>
                               ) : (
-                                <Avatar 
-                                  sx={{ 
-                                    bgcolor: track.url ? themeColors.primaryLight : themeColors.textSecondary, 
-                                    width: 36, 
+                                <Avatar
+                                  sx={{
+                                    bgcolor: track.url
+                                      ? currentTrack === index
+                                        ? alpha(themeColors.primary, 0.1)
+                                        : themeColors.lightGray
+                                      : alpha(themeColors.textSecondary, 0.1),
+                                    color: track.url
+                                      ? currentTrack === index
+                                        ? themeColors.primary
+                                        : themeColors.textPrimary
+                                      : themeColors.textSecondary,
+                                    width: 36,
                                     height: 36,
+                                    fontWeight: 600,
+                                    border: currentTrack === index ? `1px solid ${alpha(themeColors.primary, 0.3)}` : "none",
                                   }}
                                 >
                                   {index + 1}
                                 </Avatar>
                               )}
                             </Box>
-                            
+
                             {/* Track Info */}
                             <ListItemText
                               primary={track.title}
                               secondary={track.artist}
                               primaryTypographyProps={{
-                                fontWeight: currentTrack === index ? 600 : 400,
+                                fontWeight: currentTrack === index ? 600 : 500,
                                 color: themeColors.textPrimary,
-                                sx: { 
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                  maxWidth: { xs: '150px', sm: '300px', md: 'unset' }
-                                }
+                                sx: {
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                  maxWidth: { xs: "150px", sm: "300px", md: "unset" },
+                                },
                               }}
                               secondaryTypographyProps={{
                                 color: themeColors.textSecondary,
-                                sx: { 
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap'
-                                }
+                                sx: {
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                },
                               }}
                               sx={{ flex: 1 }}
                             />
-                            
+
                             {/* Duration */}
-                            <Box sx={{ 
-                              width: '100px', 
-                              display: { xs: 'none', sm: 'flex' },
-                              justifyContent: 'flex-start',
-                              alignItems: 'center'
-                            }}>
+                            <Box
+                              sx={{
+                                width: "100px",
+                                display: { xs: "none", sm: "flex" },
+                                justifyContent: "flex-start",
+                                alignItems: "center",
+                              }}
+                            >
                               {currentTrack === index && isPlaying ? (
-                                <Typography 
-                                  variant="body2" 
-                                  sx={{ 
+                                <Typography
+                                  variant="body2"
+                                  sx={{
                                     color: themeColors.primary,
-                                    fontWeight: 500
+                                    fontWeight: 600,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 0.5,
                                   }}
                                 >
-                                  Now Playing
+                                  <span className="pulse-dot" 
+                                    style={{ 
+                                      display: "inline-block",
+                                      width: "8px",
+                                      height: "8px",
+                                      borderRadius: "50%",
+                                      backgroundColor: themeColors.primary,
+                                      animation: "pulse 1.5s infinite"
+                                    }}
+                                  />
+                                  Playing
                                 </Typography>
                               ) : (
-                                <Typography variant="body2" color="textSecondary">
-                                  {formatTime(duration)}
+                                <Typography variant="body2" color="textSecondary" fontWeight={500}>
+                                  {formatTime(currentTrack === index ? duration : 0)}
                                 </Typography>
                               )}
                             </Box>
-                            
+
                             {/* Delete Button with Status Icons */}
                             {track.url && (
-                              <Box sx={{ width: '50px', display: 'flex', justifyContent: 'center' }}>
+                              <Box sx={{ width: "50px", display: "flex", justifyContent: "center" }}>
                                 {deletedFiles.has(objectName) ? (
-                                  <CheckCircleIcon 
-                                    fontSize="small" 
-                                    sx={{ color: themeColors.success }} 
-                                  />
+                                  <CheckCircleIcon fontSize="small" sx={{ color: themeColors.success }} />
                                 ) : (
                                   <Tooltip title="Delete">
-                                    <IconButton 
+                                    <IconButton
                                       size="small"
                                       onClick={(e) => handleDeleteAudio(objectName, e)}
                                       disabled={deletingFiles.has(objectName)}
-                                      sx={{ 
-                                        color: deletingFiles.has(objectName) 
-                                          ? 'text.disabled' 
-                                          : themeColors.error,
-                                        '&:hover': {
-                                          bgcolor: 'rgba(244,67,54,0.1)'
-                                        }
+                                      sx={{
+                                        color: deletingFiles.has(objectName) ? "text.disabled" : themeColors.error,
+                                        "&:hover": {
+                                          bgcolor: alpha(themeColors.error, 0.1),
+                                          transform: "scale(1.1)",
+                                        },
+                                        transition: "all 0.2s",
                                       }}
                                     >
                                       {deletingFiles.has(objectName) ? (
@@ -965,107 +1100,124 @@ const Dashboard = () => {
                         </ListItemButton>
                       </ListItem>
                       {index < audioFiles.length - 1 && (
-                        <Divider variant="inset" component="li" sx={{ ml: 7 }} />
+                        <Divider
+                          component="li"
+                          sx={{
+                            my: 0.5,
+                            opacity: 0.6,
+                            borderColor: alpha(themeColors.divider, 0.5),
+                          }}
+                        />
                       )}
                     </React.Fragment>
-                  );
+                  )
                 })
               )}
             </List>
           )}
-          
+
           {/* Empty state for no audio files */}
           {!isLoadingAudio && audioFiles.length === 0 && (
-            <Box sx={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center',
-              justifyContent: 'center',
-              py: 8,
-              gap: 2
-            }}>
-              <MusicNoteIcon sx={{ fontSize: 60, color: themeColors.textSecondary, opacity: 0.5 }} />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                py: 8,
+                gap: 2,
+              }}
+            >
+              <HeadphonesIcon sx={{ fontSize: 60, color: themeColors.textSecondary, opacity: 0.5 }} />
               <Typography variant="h6" color="textSecondary">
                 No Audio Files Available
               </Typography>
               <Typography variant="body2" color="textSecondary" align="center">
-                Click the "Generate Now" button to create your first audio file.
+                Click the "Generate New Audio" button to create your first audio file.
               </Typography>
             </Box>
           )}
         </Paper>
       </Container>
 
-      {/* Fixed Media Player at Bottom */}
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          position: 'fixed',
+      {/* Fixed Media Player at Bottom - Enhanced with modern styling */}
+      <Paper
+        elevation={3}
+        sx={{
+          position: "fixed",
           bottom: 0,
           left: 0,
           right: 0,
-          p: { xs: 1.5, sm: 2 },
+          p: { xs: 2, sm: 3 },
           bgcolor: themeColors.white,
           borderTop: `1px solid ${themeColors.divider}`,
           zIndex: 1100,
-          boxShadow: '0 -2px 10px rgba(0,0,0,0.05)'
+          boxShadow: "0 -4px 20px rgba(0,0,0,0.08)",
+          borderTopLeftRadius: "16px",
+          borderTopRightRadius: "16px",
         }}
       >
-        <Grid container alignItems="center" spacing={1}>
+        <Grid container alignItems="center" spacing={2}>
           {/* Track Info */}
           <Grid item xs={12} sm={3}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar sx={{ 
-                bgcolor: audioFiles.length > 0 && audioFiles[currentTrack]?.url ? themeColors.primary : themeColors.textSecondary, 
-                mr: 1.5,
-                width: { xs: 40, sm: 44 },
-                height: { xs: 40, sm: 44 }
-              }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Avatar
+                sx={{
+                  background: audioFiles.length > 0 && audioFiles[currentTrack]?.url ? themeColors.playerGradient : alpha(themeColors.textSecondary, 0.1),
+                  mr: 1.5,
+                  width: { xs: 44, sm: 48 },
+                  height: { xs: 44, sm: 48 },
+                  boxShadow: audioFiles.length > 0 && audioFiles[currentTrack]?.url ? `0 4px 10px ${alpha(themeColors.primary, 0.3)}` : "none",
+                }}
+              >
                 <MusicNoteIcon fontSize="small" />
               </Avatar>
-              <Box sx={{ overflow: 'hidden' }}>
-                <Typography 
-                  variant="subtitle2" 
-                  noWrap 
-                  sx={{ 
-                    maxWidth: { xs: '200px', sm: '160px' }, 
-                    fontWeight: 500,
-                    color: themeColors.textPrimary
+              <Box sx={{ overflow: "hidden" }}>
+                <Typography
+                  variant="subtitle2"
+                  noWrap
+                  sx={{
+                    maxWidth: { xs: "200px", sm: "160px" },
+                    fontWeight: 600,
+                    color: themeColors.textPrimary,
                   }}
                 >
-                  {audioFiles.length > 0 && audioFiles[currentTrack] ? audioFiles[currentTrack].title : 'No Audio'}
+                  {audioFiles.length > 0 && audioFiles[currentTrack] ? audioFiles[currentTrack].title : "No Audio"}
                 </Typography>
-                <Typography 
-                  variant="caption" 
-                  color="textSecondary" 
-                  noWrap
-                  sx={{ display: 'block' }}
-                >
-                  {audioFiles.length > 0 && audioFiles[currentTrack] ? audioFiles[currentTrack].artist : 'No files available'}
+                <Typography variant="caption" color="textSecondary" noWrap sx={{ display: "block" }}>
+                  {audioFiles.length > 0 && audioFiles[currentTrack]
+                    ? audioFiles[currentTrack].artist
+                    : "No files available"}
                 </Typography>
               </Box>
             </Box>
           </Grid>
-          
+
           {/* Player Controls */}
           <Grid item xs={12} sm={6}>
-            <Box sx={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center',
-              mt: { xs: 1, sm: 0 }
-            }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                mt: { xs: 1, sm: 0 },
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                 <Tooltip title="Previous">
                   <span>
-                    <IconButton 
-                      onClick={handlePrevious} 
-                      size="small" 
+                    <IconButton
+                      onClick={handlePrevious}
+                      size="small"
                       disabled={audioFiles.length <= 1 || !audioFiles[currentTrack]?.url}
                       sx={{
                         color: themeColors.textPrimary,
-                        '&:hover': { bgcolor: themeColors.lightGray },
-                        '&.Mui-disabled': { color: 'rgba(0, 0, 0, 0.26)' }
+                        "&:hover": { 
+                          bgcolor: themeColors.lightGray,
+                          transform: "scale(1.1)",
+                        },
+                        "&.Mui-disabled": { color: alpha(themeColors.textSecondary, 0.3) },
+                        transition: "all 0.2s",
                       }}
                     >
                       <SkipPreviousIcon />
@@ -1074,19 +1226,24 @@ const Dashboard = () => {
                 </Tooltip>
                 <Tooltip title={isPlaying ? "Pause" : "Play"}>
                   <span>
-                    <IconButton 
-                      onClick={handlePlayPause} 
+                    <IconButton
+                      onClick={handlePlayPause}
                       disabled={audioFiles.length === 0 || !audioFiles[currentTrack]?.url || !isAudioReady}
-                      sx={{ 
-                        mx: 1, 
-                        bgcolor: audioFiles.length > 0 && audioFiles[currentTrack]?.url ? themeColors.primary : themeColors.textSecondary,
+                      sx={{
+                        mx: 1,
+                        background: audioFiles.length > 0 && audioFiles[currentTrack]?.url ? themeColors.playerGradient : alpha(themeColors.textSecondary, 0.1),
                         color: themeColors.white,
-                        '&:hover': {
-                          bgcolor: audioFiles.length > 0 && audioFiles[currentTrack]?.url ? themeColors.primaryDark : themeColors.textSecondary,
+                        "&:hover": {
+                          background: audioFiles.length > 0 && audioFiles[currentTrack]?.url ? themeColors.primaryDark : alpha(themeColors.textSecondary, 0.1),
+                          transform: "scale(1.05)",
                         },
-                        transition: 'background-color 0.3s',
+                        transition: "all 0.2s",
                         width: 48,
-                        height: 48
+                        height: 48,
+                        boxShadow: audioFiles.length > 0 && audioFiles[currentTrack]?.url ? `0 4px 10px ${alpha(themeColors.primary, 0.3)}` : "none",
+                        "&:active": {
+                          transform: "scale(0.95)",
+                        },
                       }}
                     >
                       {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
@@ -1095,14 +1252,18 @@ const Dashboard = () => {
                 </Tooltip>
                 <Tooltip title="Next">
                   <span>
-                    <IconButton 
-                      onClick={handleNext} 
-                      size="small" 
+                    <IconButton
+                      onClick={handleNext}
+                      size="small"
                       disabled={audioFiles.length <= 1 || !audioFiles[currentTrack]?.url}
                       sx={{
                         color: themeColors.textPrimary,
-                        '&:hover': { bgcolor: themeColors.lightGray },
-                        '&.Mui-disabled': { color: 'rgba(0, 0, 0, 0.26)' }
+                        "&:hover": { 
+                          bgcolor: themeColors.lightGray,
+                          transform: "scale(1.1)",
+                        },
+                        "&.Mui-disabled": { color: alpha(themeColors.textSecondary, 0.3) },
+                        transition: "all 0.2s",
                       }}
                     >
                       <SkipNextIcon />
@@ -1110,17 +1271,23 @@ const Dashboard = () => {
                   </span>
                 </Tooltip>
               </Box>
-              
-              <Box sx={{ 
-                display: 'flex', 
-                width: '100%', 
-                alignItems: 'center' 
-              }}>
-                <Typography variant="caption" sx={{ 
-                  width: 40, 
-                  textAlign: 'center',
-                  color: themeColors.textSecondary
-                }}>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                <Typography
+                  variant="caption"
+                  sx={{
+                    width: 40,
+                    textAlign: "center",
+                    color: themeColors.textSecondary,
+                    fontWeight: 500,
+                  }}
+                >
                   {formatTime(currentTime)}
                 </Typography>
                 <Slider
@@ -1128,49 +1295,63 @@ const Dashboard = () => {
                   value={progress}
                   onChange={handleProgressChange}
                   disabled={audioFiles.length === 0 || !audioFiles[currentTrack]?.url || !isAudioReady}
-                  sx={{ 
+                  sx={{
                     mx: { xs: 0, sm: 1 },
                     color: audioFiles.length > 0 && audioFiles[currentTrack]?.url ? themeColors.primary : themeColors.textSecondary,
                     height: 4,
-                    '& .MuiSlider-thumb': {
+                    "& .MuiSlider-thumb": {
                       width: 12,
                       height: 12,
-                      transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
-                      '&:hover, &.Mui-focusVisible': {
-                        boxShadow: `0px 0px 0px 8px ${themeColors.primaryLight}`,
+                      transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
+                      "&:hover, &.Mui-focusVisible": {
+                        boxShadow: `0px 0px 0px 8px ${alpha(themeColors.primary, 0.2)}`,
                       },
                     },
-                    '& .MuiSlider-rail': {
+                    "& .MuiSlider-rail": {
                       opacity: 0.5,
-                    }
+                    },
+                    "& .MuiSlider-track": {
+                      background: themeColors.playerGradient,
+                    },
                   }}
                 />
-                <Typography variant="caption" sx={{ 
-                  width: 40, 
-                  textAlign: 'center',
-                  color: themeColors.textSecondary
-                }}>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    width: 40,
+                    textAlign: "center",
+                    color: themeColors.textSecondary,
+                    fontWeight: 500,
+                  }}
+                >
                   {formatTime(duration)}
                 </Typography>
               </Box>
             </Box>
           </Grid>
-          
+
           {/* Volume Control */}
           <Grid item xs={12} sm={3}>
-            <Box sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: { xs: 'center', sm: 'flex-end' },
-              mt: { xs: 1, sm: 0 },
-              mb: { xs: 1, sm: 0 }
-            }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: { xs: "center", sm: "flex-end" },
+                mt: { xs: 1, sm: 0 },
+                mb: { xs: 1, sm: 0 },
+              }}
+            >
               <Tooltip title={isMuted ? "Unmute" : "Mute"}>
-                <IconButton 
+                <IconButton
                   onClick={handleToggleMute}
                   disabled={audioFiles.length === 0 || !audioFiles[currentTrack]?.url}
                   size="small"
-                  sx={{ color: themeColors.textSecondary }}
+                  sx={{ 
+                    color: isMuted ? themeColors.error : themeColors.textSecondary,
+                    "&:hover": {
+                      bgcolor: alpha(isMuted ? themeColors.error : themeColors.primary, 0.1),
+                    },
+                  }}
                 >
                   {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
                 </IconButton>
@@ -1180,25 +1361,48 @@ const Dashboard = () => {
                 value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
                 disabled={audioFiles.length === 0 || !audioFiles[currentTrack]?.url}
-                sx={{ 
-                  width: { xs: '50%', sm: 100 },
-                  color: audioFiles.length > 0 && audioFiles[currentTrack]?.url ? themeColors.primary : themeColors.textSecondary,
+                sx={{
+                  width: { xs: "50%", sm: 100 },
+                  color: audioFiles.length > 0 && audioFiles[currentTrack]?.url 
+                    ? isMuted ? alpha(themeColors.error, 0.7) : themeColors.primary 
+                    : themeColors.textSecondary,
                   height: 4,
-                  '& .MuiSlider-thumb': {
+                  "& .MuiSlider-thumb": {
                     width: 12,
                     height: 12,
-                    '&:hover, &.Mui-focusVisible': {
-                      boxShadow: `0px 0px 0px 8px ${themeColors.primaryLight}`,
+                    "&:hover, &.Mui-focusVisible": {
+                      boxShadow: `0px 0px 0px 8px ${alpha(isMuted ? themeColors.error : themeColors.primary, 0.2)}`,
                     },
-                  }
+                  },
+                  "& .MuiSlider-track": {
+                    background: isMuted ? alpha(themeColors.error, 0.7) : themeColors.playerGradient,
+                  },
                 }}
               />
             </Box>
           </Grid>
         </Grid>
       </Paper>
+
+      {/* Add global styles for animations */}
+      <style>{`
+        @keyframes pulse {
+          0% {
+            transform: scale(0.95);
+            opacity: 0.7;
+          }
+          50% {
+            transform: scale(1.1);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(0.95);
+            opacity: 0.7;
+          }
+        }
+      `}</style>
     </Box>
-  );
+  )
 }
 
 export default Dashboard

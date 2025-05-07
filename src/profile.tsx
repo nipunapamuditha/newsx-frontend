@@ -24,6 +24,7 @@ import {
   Badge,
   Alert,
   Snackbar,
+  alpha,
 } from "@mui/material"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import SearchIcon from "@mui/icons-material/Search"
@@ -37,22 +38,23 @@ import AddIcon from "@mui/icons-material/Add"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import newsxLogo from "/newxlogo.png"
 
-// Define theme colors
+// Define theme colors - Updated with a more modern palette
 const themeColors = {
-  primary: "#2196f3", // Blue
-  primaryLight: "#bbdefb", // Lighter blue for hover states
-  primaryDark: "#1565c0", // Darker blue for active states
-  secondary: "#e3f2fd", // Light Blue
+  primary: "#4361ee", // Modern blue
+  primaryLight: "#d8e1ff", // Lighter blue for hover states
+  primaryDark: "#3a56d4", // Darker blue for active states
+  secondary: "#edf2ff", // Light Blue background
   white: "#ffffff",
-  lightGray: "#f5f5f5",
-  mediumGray: "#eeeeee",
-  textPrimary: "#333333",
-  textSecondary: "#757575",
-  success: "#4caf50",
-  error: "#f44336",
-  warning: "#ff9800",
-  divider: "#e0e0e0",
-  background: "#f5f8ff",
+  lightGray: "#f8fafc", // Lighter background
+  mediumGray: "#eef2f6",
+  textPrimary: "#1e293b", // Darker text for better contrast
+  textSecondary: "#64748b", // Modern secondary text
+  success: "#10b981", // Modern green
+  error: "#ef4444", // Modern red
+  warning: "#f59e0b", // Modern orange
+  divider: "#e2e8f0",
+  background: "#f1f5f9", // Subtle background
+  cardShadow: "0 4px 20px rgba(0, 0, 0, 0.05)", // Soft shadow for cards
 }
 
 interface User {
@@ -292,23 +294,23 @@ const Profile = () => {
   return (
     <Box
       sx={{
-        height: "100vh",
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         bgcolor: themeColors.background,
-        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+        fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
       }}
     >
-      {/* Header */}
+      {/* Header - Modernized with gradient and better spacing */}
       <AppBar
         position="static"
         elevation={0}
         sx={{
-          bgcolor: themeColors.primary,
-          borderBottom: `1px solid ${themeColors.primaryDark}`,
+          background: `linear-gradient(135deg, ${themeColors.primary} 0%, ${themeColors.primaryDark} 100%)`,
+          borderBottom: "none",
         }}
       >
-        <Toolbar sx={{ height: 64 }}>
+        <Toolbar sx={{ height: 70, px: { xs: 2, sm: 4 } }}>
           <Box
             sx={{
               flexGrow: 1,
@@ -329,54 +331,79 @@ const Profile = () => {
               variant="h6"
               sx={{
                 display: { xs: "none", sm: "block" },
-                fontWeight: 500,
+                fontWeight: 600,
                 letterSpacing: "0.5px",
               }}
             >
               User Profile
             </Typography>
           </Box>
-          <Button
-            startIcon={<PersonIcon />}
-            onClick={() => handleNavigate("profile")}
-            sx={{
-              color: "white",
-              borderBottom: currentPage === "profile" ? 2 : 0,
-              borderColor: "white",
-              mx: 1,
-              borderRadius: "4px",
-              py: 1,
-              px: 2,
-              "&:hover": {
-                bgcolor: "rgba(255,255,255,0.1)",
-                transition: "background-color 0.3s",
-              },
-            }}
-          >
-            Profile
-          </Button>
-          <Button
-            startIcon={<DashboardIcon />}
-            onClick={() => handleNavigate("dashboard")}
-            sx={{
-              color: "white",
-              borderBottom: currentPage === "dashboard" ? 2 : 0,
-              borderColor: "white",
-              borderRadius: "4px",
-              py: 1,
-              px: 2,
-              "&:hover": {
-                bgcolor: "rgba(255,255,255,0.1)",
-                transition: "background-color 0.3s",
-              },
-            }}
-          >
-            Dashboard
-          </Button>
+          
+          {/* Navigation buttons with improved styling */}
+          <Box sx={{ display: "flex", gap: { xs: 1, sm: 2 } }}>
+            <Button
+              startIcon={<PersonIcon />}
+              onClick={() => handleNavigate("profile")}
+              sx={{
+                color: "white",
+                position: "relative",
+                borderRadius: "8px",
+                py: 1,
+                px: { xs: 1.5, sm: 2 },
+                "&:hover": {
+                  bgcolor: "rgba(255,255,255,0.15)",
+                  transition: "background-color 0.3s",
+                },
+                "&::after": currentPage === "profile" ? {
+                  content: '""',
+                  position: "absolute",
+                  bottom: "6px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "20px",
+                  height: "3px",
+                  bgcolor: "white",
+                  borderRadius: "10px",
+                } : {},
+              }}
+            >
+              <Typography sx={{ display: { xs: "none", sm: "block" }, ml: 0.5 }}>Profile</Typography>
+              {isMobile && <PersonIcon />}
+            </Button>
+            <Button
+              startIcon={<DashboardIcon />}
+              onClick={() => handleNavigate("dashboard")}
+              sx={{
+                color: "white",
+                position: "relative",
+                borderRadius: "8px",
+                py: 1,
+                px: { xs: 1.5, sm: 2 },
+                "&:hover": {
+                  bgcolor: "rgba(255,255,255,0.15)",
+                  transition: "background-color 0.3s",
+                },
+                "&::after": currentPage === "dashboard" ? {
+                  content: '""',
+                  position: "absolute",
+                  bottom: "6px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "20px",
+                  height: "3px",
+                  bgcolor: "white",
+                  borderRadius: "10px",
+                } : {},
+              }}
+            >
+              <Typography sx={{ display: { xs: "none", sm: "block" }, ml: 0.5 }}>Dashboard</Typography>
+              {isMobile && <DashboardIcon />}
+            </Button>
+          </Box>
         </Toolbar>
       </AppBar>
 
-      {/* Main Content Area */}
+      {/* Main Content Area - Improved spacing and layout */}
       <Box sx={{ flexGrow: 1, overflow: "auto", p: { xs: 2, sm: 3, md: 4 } }}>
         {currentPage === "profile" ? (
           <Container maxWidth="xl" sx={{ height: "100%" }}>
@@ -391,14 +418,14 @@ const Profile = () => {
                   gap: 2,
                 }}
               >
-                <CircularProgress size={40} />
+                <CircularProgress size={40} sx={{ color: themeColors.primary }} />
                 <Typography variant="body1" color="textSecondary">
                   Loading your profile...
                 </Typography>
               </Box>
             ) : (
               <Grid container spacing={4}>
-                {/* Profile Header */}
+                {/* Profile Header - Enhanced with modern styling */}
                 <Grid item xs={12}>
                   <Paper
                     elevation={0}
@@ -410,10 +437,26 @@ const Profile = () => {
                       flexDirection: { xs: "column", sm: "row" },
                       alignItems: { xs: "center", sm: "flex-start" },
                       gap: 3,
-                      borderRadius: 2,
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                      borderRadius: "16px",
+                      boxShadow: themeColors.cardShadow,
+                      position: "relative",
+                      overflow: "hidden",
                     }}
                   >
+                    {/* Decorative background element */}
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: -100,
+                        right: -100,
+                        width: 300,
+                        height: 300,
+                        borderRadius: "50%",
+                        background: `linear-gradient(135deg, ${alpha(themeColors.primary, 0.1)} 0%, ${alpha(themeColors.primaryLight, 0.05)} 100%)`,
+                        zIndex: 0,
+                      }}
+                    />
+                    
                     <Badge
                       overlap="circular"
                       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -421,7 +464,7 @@ const Profile = () => {
                         <Tooltip title="Account Settings">
                           <IconButton
                             sx={{
-                              bgcolor: themeColors.primary,
+                              background: `linear-gradient(135deg, ${themeColors.primary} 0%, ${themeColors.primaryDark} 100%)`,
                               color: themeColors.white,
                               "&:hover": {
                                 bgcolor: themeColors.primaryDark,
@@ -429,6 +472,7 @@ const Profile = () => {
                               width: 32,
                               height: 32,
                               border: `2px solid ${themeColors.white}`,
+                              boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
                             }}
                           >
                             <SettingsIcon sx={{ fontSize: 16 }} />
@@ -438,13 +482,15 @@ const Profile = () => {
                     >
                       <Avatar
                         sx={{
-                          width: { xs: 80, md: 100 },
-                          height: { xs: 80, md: 100 },
-                          bgcolor: themeColors.primary,
-                          boxShadow: "0 4px 12px rgba(33,150,243,0.2)",
+                          width: { xs: 90, md: 110 },
+                          height: { xs: 90, md: 110 },
+                          background: `linear-gradient(135deg, ${themeColors.primary} 0%, ${themeColors.primaryDark} 100%)`,
+                          boxShadow: "0 4px 20px rgba(67, 97, 238, 0.3)",
+                          border: `3px solid ${themeColors.white}`,
+                          zIndex: 1,
                         }}
                       >
-                        <AccountCircleIcon sx={{ fontSize: { xs: 60, md: 80 } }} />
+                        <AccountCircleIcon sx={{ fontSize: { xs: 60, md: 70 }, color: "white" }} />
                       </Avatar>
                     </Badge>
                     <Box
@@ -452,30 +498,32 @@ const Profile = () => {
                         display: "flex",
                         flexDirection: "column",
                         alignItems: { xs: "center", sm: "flex-start" },
+                        zIndex: 1,
                       }}
                     >
                       <Typography
                         variant="h4"
-                        fontWeight="bold"
+                        fontWeight="700"
                         sx={{
                           color: themeColors.textPrimary,
                           mb: 1,
                           textAlign: { xs: "center", sm: "left" },
+                          fontSize: { xs: "1.5rem", md: "2rem" },
                         }}
                       >
                         {user ? `${user.first_name} ${user.last_name}` : "Loading..."}
                       </Typography>
                       <Typography
                         variant="body1"
-                        color="textSecondary"
                         sx={{
                           display: "flex",
                           alignItems: "center",
                           gap: 1,
                           mb: 1,
+                          color: themeColors.textSecondary,
                         }}
                       >
-                        <EmailIcon fontSize="small" color="primary" />
+                        <EmailIcon fontSize="small" sx={{ color: themeColors.primary }} />
                         {user ? user.email : "Loading..."}
                       </Typography>
                       <Chip
@@ -483,13 +531,21 @@ const Profile = () => {
                         color="primary"
                         size="small"
                         icon={<CheckCircleIcon />}
-                        sx={{ mt: 1 }}
+                        sx={{ 
+                          mt: 1, 
+                          bgcolor: alpha(themeColors.primary, 0.1), 
+                          color: themeColors.primary,
+                          fontWeight: 500,
+                          '& .MuiChip-icon': { color: themeColors.success },
+                          borderRadius: "8px",
+                          height: "28px",
+                        }}
                       />
                     </Box>
                   </Paper>
                 </Grid>
 
-                {/* User Information */}
+                {/* User Information - Enhanced with modern styling */}
                 <Grid item xs={12} md={8}>
                   <Paper
                     elevation={0}
@@ -497,8 +553,8 @@ const Profile = () => {
                       p: { xs: 3, md: 4 },
                       bgcolor: themeColors.white,
                       height: "100%",
-                      borderRadius: 2,
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                      borderRadius: "16px",
+                      boxShadow: themeColors.cardShadow,
                     }}
                   >
                     <Box
@@ -509,7 +565,25 @@ const Profile = () => {
                         mb: 2,
                       }}
                     >
-                      <Typography variant="h6" fontWeight="bold" color={themeColors.primary} gutterBottom>
+                      <Typography 
+                        variant="h6" 
+                        fontWeight="600" 
+                        color={themeColors.primary} 
+                        gutterBottom
+                        sx={{ 
+                          position: "relative",
+                          "&::after": {
+                            content: '""',
+                            position: "absolute",
+                            bottom: "-8px",
+                            left: 0,
+                            width: "40px",
+                            height: "3px",
+                            bgcolor: themeColors.primary,
+                            borderRadius: "10px",
+                          }
+                        }}
+                      >
                         Account Information
                       </Typography>
                       <Chip
@@ -517,24 +591,47 @@ const Profile = () => {
                         size="small"
                         color="success"
                         icon={<CheckCircleIcon />}
-                        sx={{ height: 24 }}
+                        sx={{ 
+                          height: 28, 
+                          bgcolor: alpha(themeColors.success, 0.1), 
+                          color: themeColors.success,
+                          fontWeight: 500,
+                          '& .MuiChip-icon': { color: themeColors.success },
+                          borderRadius: "8px",
+                        }}
                       />
                     </Box>
-                    <Divider sx={{ mb: 3 }} />
+                    <Divider sx={{ mb: 3, borderColor: alpha(themeColors.divider, 0.6) }} />
 
                     <Grid container spacing={4}>
                       <Grid item xs={12} sm={6}>
                         <Box
                           sx={{
                             p: 3,
-                            borderRadius: 2,
+                            borderRadius: "12px",
                             bgcolor: themeColors.lightGray,
                             height: "100%",
+                            transition: "transform 0.2s, box-shadow 0.2s",
+                            "&:hover": {
+                              transform: "translateY(-2px)",
+                              boxShadow: "0 6px 20px rgba(0,0,0,0.05)",
+                            },
                           }}
                         >
                           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-                            <EmailIcon color="primary" />
-                            <Typography variant="subtitle1" fontWeight="medium" color={themeColors.textPrimary}>
+                            <Box 
+                              sx={{ 
+                                bgcolor: alpha(themeColors.primary, 0.1), 
+                                borderRadius: "8px", 
+                                p: 1,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <EmailIcon sx={{ color: themeColors.primary }} />
+                            </Box>
+                            <Typography variant="subtitle1" fontWeight="600" color={themeColors.textPrimary}>
                               Email Address
                             </Typography>
                           </Box>
@@ -543,9 +640,10 @@ const Profile = () => {
                             sx={{
                               p: 2,
                               bgcolor: themeColors.white,
-                              borderRadius: 1,
+                              borderRadius: "10px",
                               border: `1px solid ${themeColors.divider}`,
                               wordBreak: "break-all",
+                              boxShadow: "0 2px 6px rgba(0,0,0,0.03)",
                             }}
                           >
                             {user ? user.email : "Loading..."}
@@ -557,14 +655,30 @@ const Profile = () => {
                         <Box
                           sx={{
                             p: 3,
-                            borderRadius: 2,
+                            borderRadius: "12px",
                             bgcolor: themeColors.lightGray,
                             height: "100%",
+                            transition: "transform 0.2s, box-shadow 0.2s",
+                            "&:hover": {
+                              transform: "translateY(-2px)",
+                              boxShadow: "0 6px 20px rgba(0,0,0,0.05)",
+                            },
                           }}
                         >
                           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-                            <PersonIcon color="primary" />
-                            <Typography variant="subtitle1" fontWeight="medium" color={themeColors.textPrimary}>
+                            <Box 
+                              sx={{ 
+                                bgcolor: alpha(themeColors.primary, 0.1), 
+                                borderRadius: "8px", 
+                                p: 1,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <PersonIcon sx={{ color: themeColors.primary }} />
+                            </Box>
+                            <Typography variant="subtitle1" fontWeight="600" color={themeColors.textPrimary}>
                               User ID
                             </Typography>
                           </Box>
@@ -573,10 +687,11 @@ const Profile = () => {
                             sx={{
                               p: 2,
                               bgcolor: themeColors.white,
-                              borderRadius: 1,
+                              borderRadius: "10px",
                               border: `1px solid ${themeColors.divider}`,
                               fontFamily: "monospace",
                               wordBreak: "break-all",
+                              boxShadow: "0 2px 6px rgba(0,0,0,0.03)",
                             }}
                           >
                             {user ? user.unique_id : "Loading..."}
@@ -589,24 +704,49 @@ const Profile = () => {
                           sx={{
                             mt: 2,
                             p: 3,
-                            borderRadius: 2,
-                            bgcolor: themeColors.secondary,
-                            border: `1px dashed ${themeColors.primary}`,
+                            borderRadius: "12px",
+                            background: `linear-gradient(135deg, ${alpha(themeColors.primary, 0.05)} 0%, ${alpha(themeColors.primaryLight, 0.2)} 100%)`,
+                            border: `1px solid ${alpha(themeColors.primary, 0.2)}`,
+                            position: "relative",
+                            overflow: "hidden",
                           }}
                         >
-                          <Typography variant="subtitle1" fontWeight="medium" color={themeColors.primary} gutterBottom>
-                            Account Status
-                          </Typography>
-                          <Typography variant="body2">
-                            Your account is active and in good standing. You have full access to all features.
-                          </Typography>
+                          {/* Decorative element */}
+                          <Box
+                            sx={{
+                              position: "absolute",
+                              top: -20,
+                              right: -20,
+                              width: 100,
+                              height: 100,
+                              borderRadius: "50%",
+                              background: alpha(themeColors.primary, 0.1),
+                              zIndex: 0,
+                            }}
+                          />
+                          
+                          <Box sx={{ position: "relative", zIndex: 1 }}>
+                            <Typography 
+                              variant="subtitle1" 
+                              fontWeight="600" 
+                              color={themeColors.primary} 
+                              gutterBottom
+                              sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                            >
+                              <CheckCircleIcon fontSize="small" />
+                              Account Status
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: themeColors.textSecondary }}>
+                              Your account is active and in good standing. You have full access to all features.
+                            </Typography>
+                          </Box>
                         </Box>
                       </Grid>
                     </Grid>
                   </Paper>
                 </Grid>
 
-                {/* Preferences Panel */}
+                {/* Preferences Panel - Enhanced with modern styling */}
                 <Grid item xs={12} md={4}>
                   <Paper
                     elevation={0}
@@ -614,8 +754,8 @@ const Profile = () => {
                       p: { xs: 3, md: 4 },
                       bgcolor: themeColors.white,
                       height: "100%",
-                      borderRadius: 2,
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                      borderRadius: "16px",
+                      boxShadow: themeColors.cardShadow,
                       position: "relative",
                       overflow: "hidden",
                     }}
@@ -624,26 +764,54 @@ const Profile = () => {
                     <Box
                       sx={{
                         position: "absolute",
-                        top: 0,
-                        right: 0,
-                        width: "150px",
-                        height: "150px",
-                        background: `radial-gradient(circle at top right, ${themeColors.primaryLight}, transparent 70%)`,
-                        opacity: 0.7,
+                        top: -50,
+                        right: -50,
+                        width: 200,
+                        height: 200,
+                        borderRadius: "50%",
+                        background: `radial-gradient(circle at top right, ${alpha(themeColors.primary, 0.1)}, transparent 70%)`,
                         zIndex: 0,
                       }}
                     />
 
                     <Box sx={{ position: "relative", zIndex: 1 }}>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-                        <DashboardIcon color="primary" />
-                        <Typography variant="h6" fontWeight="bold" color={themeColors.primary}>
+                        <Box 
+                          sx={{ 
+                            bgcolor: alpha(themeColors.primary, 0.1), 
+                            borderRadius: "8px", 
+                            p: 1,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <DashboardIcon sx={{ color: themeColors.primary }} />
+                        </Box>
+                        <Typography 
+                          variant="h6" 
+                          fontWeight="600" 
+                          color={themeColors.primary}
+                          sx={{ 
+                            position: "relative",
+                            "&::after": {
+                              content: '""',
+                              position: "absolute",
+                              bottom: "-8px",
+                              left: 0,
+                              width: "40px",
+                              height: "3px",
+                              bgcolor: themeColors.primary,
+                              borderRadius: "10px",
+                            }
+                          }}
+                        >
                           Manage Preferences
                         </Typography>
                       </Box>
-                      <Divider sx={{ mb: 3 }} />
+                      <Divider sx={{ mb: 3, borderColor: alpha(themeColors.divider, 0.6) }} />
 
-                      {/* Search Box */}
+                      {/* Search Box - Enhanced with modern styling */}
                       <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
                         <TextField
                           fullWidth
@@ -654,16 +822,25 @@ const Profile = () => {
                           size="small"
                           disabled={isSearching}
                           InputProps={{
-                            startAdornment: <SearchIcon color="action" sx={{ mr: 1 }} />,
-                          }}
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              borderRadius: 2,
-                              "&.Mui-focused fieldset": {
-                                borderColor: themeColors.primary,
-                                borderWidth: 2,
+                            startAdornment: <SearchIcon color="action" sx={{ mr: 1, color: themeColors.textSecondary }} />,
+                            sx: {
+                              borderRadius: "10px",
+                              bgcolor: themeColors.lightGray,
+                              '&.Mui-focused': {
+                                boxShadow: `0 0 0 2px ${alpha(themeColors.primary, 0.2)}`,
                               },
-                            },
+                              '& fieldset': {
+                                borderColor: 'transparent',
+                              },
+                              '&:hover fieldset': {
+                                borderColor: themeColors.divider,
+                              },
+                              '&.Mui-focused fieldset': {
+                                borderColor: themeColors.primary,
+                                borderWidth: '1px',
+                              },
+                              transition: 'all 0.2s',
+                            }
                           }}
                         />
                         <Button
@@ -671,25 +848,37 @@ const Profile = () => {
                           onClick={handleSearch}
                           disabled={isSearching || !searchTerm.trim()}
                           sx={{
-                            bgcolor: themeColors.primary,
-                            "&:hover": { bgcolor: themeColors.primaryDark },
-                            borderRadius: 2,
+                            background: `linear-gradient(135deg, ${themeColors.primary} 0%, ${themeColors.primaryDark} 100%)`,
+                            "&:hover": { 
+                              background: `linear-gradient(135deg, ${themeColors.primaryDark} 0%, ${themeColors.primaryDark} 100%)`,
+                              boxShadow: `0 4px 14px ${alpha(themeColors.primary, 0.4)}`,
+                            },
+                            borderRadius: "10px",
                             minWidth: "auto",
                             px: 2,
+                            boxShadow: `0 4px 10px ${alpha(themeColors.primary, 0.3)}`,
+                            transition: "all 0.2s",
                           }}
                         >
                           {isSearching ? <CircularProgress size={24} color="inherit" /> : <AddIcon />}
                         </Button>
                       </Box>
 
-                      {/* Selected Items */}
-                      <Typography variant="subtitle2" fontWeight="medium" gutterBottom>
+                      {/* Selected Items - Enhanced with modern styling */}
+                      <Typography variant="subtitle2" fontWeight="600" gutterBottom sx={{ color: themeColors.textPrimary }}>
                         Your Selected Preferences:{" "}
                         <Chip
                           label={selectedItems.length}
                           size="small"
                           color="primary"
-                          sx={{ ml: 1, height: 20, fontSize: "0.75rem" }}
+                          sx={{ 
+                            ml: 1, 
+                            height: 20, 
+                            fontSize: "0.75rem",
+                            bgcolor: alpha(themeColors.primary, 0.1),
+                            color: themeColors.primary,
+                            fontWeight: 600,
+                          }}
                         />
                       </Typography>
                       <Box
@@ -697,22 +886,22 @@ const Profile = () => {
                           mb: 3,
                           maxHeight: 240,
                           overflow: "auto",
-                          borderRadius: 2,
+                          borderRadius: "12px",
                           p: selectedItems.length > 0 ? 2 : 0,
-                          border: selectedItems.length > 0 ? `1px solid ${themeColors.divider}` : "none",
+                          border: selectedItems.length > 0 ? `1px solid ${alpha(themeColors.divider, 0.6)}` : "none",
                           bgcolor: selectedItems.length > 0 ? themeColors.white : "transparent",
                           "&::-webkit-scrollbar": {
-                            width: "8px",
+                            width: "6px",
                           },
                           "&::-webkit-scrollbar-track": {
                             background: themeColors.lightGray,
                             borderRadius: "10px",
                           },
                           "&::-webkit-scrollbar-thumb": {
-                            background: themeColors.mediumGray,
+                            background: alpha(themeColors.primary, 0.2),
                             borderRadius: "10px",
                             "&:hover": {
-                              background: themeColors.textSecondary,
+                              background: alpha(themeColors.primary, 0.4),
                             },
                           },
                         }}
@@ -727,11 +916,11 @@ const Profile = () => {
                               justifyContent: "center",
                               gap: 1,
                               bgcolor: themeColors.lightGray,
-                              borderRadius: 2,
+                              borderRadius: "12px",
                             }}
                           >
                             <SearchIcon sx={{ color: themeColors.textSecondary, fontSize: 40, opacity: 0.5 }} />
-                            <Typography variant="body2" color="textSecondary" align="center">
+                            <Typography variant="body2" color="textSecondary" align="center" sx={{ fontWeight: 500 }}>
                               No preferences selected yet
                             </Typography>
                             <Typography variant="caption" color="textSecondary" align="center">
@@ -748,14 +937,15 @@ const Profile = () => {
                                 alignItems: "center",
                                 p: 1.5,
                                 mb: 1,
-                                bgcolor: item.isAutoFilled ? themeColors.secondary : themeColors.white,
-                                borderRadius: 1,
+                                bgcolor: item.isAutoFilled ? alpha(themeColors.primary, 0.05) : themeColors.white,
+                                borderRadius: "10px",
                                 border: "1px solid",
-                                borderColor: item.isAutoFilled ? themeColors.primary : themeColors.divider,
+                                borderColor: item.isAutoFilled ? alpha(themeColors.primary, 0.3) : themeColors.divider,
                                 transition: "all 0.2s ease",
                                 "&:hover": {
-                                  boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-                                  borderColor: item.isAutoFilled ? themeColors.primary : themeColors.primary,
+                                  boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                                  borderColor: item.isAutoFilled ? themeColors.primary : alpha(themeColors.primary, 0.3),
+                                  transform: "translateY(-2px)",
                                 },
                               }}
                             >
@@ -765,11 +955,18 @@ const Profile = () => {
                                   label={item.name}
                                   color={item.isAutoFilled ? "primary" : "default"}
                                   variant={item.isAutoFilled ? "filled" : "outlined"}
-                                  sx={{ mr: 1 }}
+                                  sx={{ 
+                                    mr: 1,
+                                    borderRadius: "8px",
+                                    bgcolor: item.isAutoFilled ? alpha(themeColors.primary, 0.1) : "transparent",
+                                    color: item.isAutoFilled ? themeColors.primary : themeColors.textSecondary,
+                                    border: item.isAutoFilled ? "none" : `1px solid ${themeColors.divider}`,
+                                    fontWeight: 500,
+                                  }}
                                 />
                                 {item.isAutoFilled && (
                                   <Tooltip title="Saved preference">
-                                    <CheckCircleIcon fontSize="small" color="primary" sx={{ ml: 1, opacity: 0.7 }} />
+                                    <CheckCircleIcon fontSize="small" sx={{ ml: 1, color: themeColors.success }} />
                                   </Tooltip>
                                 )}
                               </Box>
@@ -780,7 +977,12 @@ const Profile = () => {
                                   sx={{
                                     color: themeColors.error,
                                     opacity: 0.7,
-                                    "&:hover": { opacity: 1, bgcolor: "rgba(244,67,54,0.1)" },
+                                    "&:hover": { 
+                                      opacity: 1, 
+                                      bgcolor: alpha(themeColors.error, 0.1),
+                                      transform: "scale(1.1)",
+                                    },
+                                    transition: "all 0.2s",
                                   }}
                                 >
                                   <DeleteOutlineIcon fontSize="small" />
@@ -791,7 +993,7 @@ const Profile = () => {
                         )}
                       </Box>
 
-                      {/* Submit Button */}
+                      {/* Submit Button - Enhanced with modern styling */}
                       <Button
                         variant="contained"
                         fullWidth
@@ -799,16 +1001,23 @@ const Profile = () => {
                         onClick={handleSubmitSelections}
                         disabled={isSaving || selectedItems.length === 0}
                         sx={{
-                          bgcolor: themeColors.primary,
-                          "&:hover": { bgcolor: themeColors.primaryDark },
-                          borderRadius: 2,
+                          background: `linear-gradient(135deg, ${themeColors.primary} 0%, ${themeColors.primaryDark} 100%)`,
+                          "&:hover": { 
+                            background: `linear-gradient(135deg, ${themeColors.primaryDark} 0%, ${themeColors.primaryDark} 100%)`,
+                            boxShadow: `0 4px 14px ${alpha(themeColors.primary, 0.4)}`,
+                          },
+                          borderRadius: "10px",
                           py: 1.5,
-                          fontWeight: "bold",
-                          boxShadow: "0 2px 8px rgba(25, 118, 210, 0.3)",
+                          fontWeight: "600",
+                          boxShadow: `0 4px 12px ${alpha(themeColors.primary, 0.3)}`,
                           transition: "all 0.2s ease",
                           "&:active": {
                             transform: "scale(0.98)",
                           },
+                          "&:disabled": {
+                            background: themeColors.mediumGray,
+                            color: themeColors.textSecondary,
+                          }
                         }}
                       >
                         {isSaving ? "Saving..." : "Save Preferences"}
@@ -827,14 +1036,26 @@ const Profile = () => {
         )}
       </Box>
 
-      {/* Notification Snackbar */}
+      {/* Notification Snackbar - Enhanced with modern styling */}
       <Snackbar
         open={notification.open}
         autoHideDuration={5000}
         onClose={handleCloseNotification}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseNotification} severity={notification.severity} sx={{ width: "100%" }}>
+        <Alert 
+          onClose={handleCloseNotification} 
+          severity={notification.severity} 
+          sx={{ 
+            width: "100%",
+            borderRadius: "10px",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+            fontWeight: 500,
+            '& .MuiAlert-icon': {
+              fontSize: '1.25rem'
+            }
+          }}
+        >
           {notification.message}
         </Alert>
       </Snackbar>

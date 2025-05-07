@@ -818,7 +818,7 @@ const Profile = () => {
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
                           onKeyPress={handleKeyPress}
-                          placeholder="Add new preference..."
+                          placeholder="Add Substack username..."
                           size="small"
                           disabled={isSearching}
                           InputProps={{

@@ -320,7 +320,7 @@ const Dashboard = () => {
 
     setIsGenerating(true)
     setGenerationStatus("Initializing...")
-    setReceivedSuccessMessage(false) // Reset success flag
+    setReceivedSuccessMessage(false) // Reset success flag for the new generation attempt
 
     // Create EventSource for SSE
     const eventSource = new EventSource("https://newsxapi.newsloop.xyz/v1/Generate_now", {
@@ -328,48 +328,44 @@ const Dashboard = () => {
     })
     eventSourceRef.current = eventSource
 
+    // Common handler for when the SSE connection ends (success, error, or done)
+    const handleGenerationEnd = () => {
+      setIsGenerating(false)
+      setGenerationStatus("Generate Now") // Always reset to "Generate Now"
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close()
+        eventSourceRef.current = null
+      }
+      // Refresh audio files after 1 second
+      setTimeout(() => {
+        refreshAudioFiles()
+      }, 1000)
+    }
+
     eventSource.onmessage = (event) => {
       setGenerationStatus(event.data)
 
       // Check if this is a success message
       if (event.data.includes("Audio file generated successfully")) {
         setReceivedSuccessMessage(true)
-
-        // Treat this as completion
-        setTimeout(() => {
-          setGenerationStatus("Generate Now")
-          setIsGenerating(false)
-          eventSource.close()
-          eventSourceRef.current = null
-
-          // Refresh audio files
-          refreshAudioFiles()
-        }, 1000) // Give a small delay to ensure all messages are processed
+        // Even on success message, we'll let the 'done' event or a subsequent error/timeout handle the final cleanup,
+        // or if this success message is the definitive end, call handleGenerationEnd.
+        // For consistency with original logic that had a timeout, let's assume this message
+        // might be followed by more or a 'done' event. If it's the *absolute* end, call handleGenerationEnd().
+        // The original code treated this as completion with a timeout, so we can call handleGenerationEnd.
+        handleGenerationEnd();
       }
     }
 
     eventSource.onerror = () => {
-      // Only treat as an error if we didn't receive a success message
-      if (!receivedSuccessMessage) {
-        setGenerationStatus("Generation Failed")
-        setIsGenerating(false)
-      } else {
-        setGenerationStatus("Generate Now")
-        setIsGenerating(false)
-      }
-      eventSource.close()
-      eventSourceRef.current = null
+      // Call the common handler on error. This will not set "Generation Failed".
+      handleGenerationEnd()
     }
 
     // Listen for a "done" event if your API sends one
     eventSource.addEventListener("done", () => {
-      setGenerationStatus("Generate Now")
-      setIsGenerating(false)
-      eventSource.close()
-      eventSourceRef.current = null
-
-      // Refresh audio files after generation completes
-      refreshAudioFiles()
+      // Call the common handler when "done" is received.
+      handleGenerationEnd()
     })
   }
 

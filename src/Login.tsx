@@ -91,7 +91,7 @@ const Login = () => {
             <h1 style={styles.appTitle}>
               NEW<span style={styles.xHighlight}>X</span>
             </h1>
-            <p style={styles.loginSubtitle}>Sign in to continue</p>
+            <p style={styles.loginSubtitle}>Sign in to continue | Nipuna Karunarathna - 500238003 </p>
             <div style={styles.googleLoginWrapper}>
               <GoogleLogin
                 onSuccess={handleLoginSuccess}

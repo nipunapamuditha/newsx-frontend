@@ -39,7 +39,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
 import HeadphonesIcon from "@mui/icons-material/Headphones"
-import MoreVertIcon from "@mui/icons-material/MoreVert"
+//import MoreVertIcon from "@mui/icons-material/MoreVert"
 import newsxLogo from "/newxlogo.png"
 
 // Define theme colors - Updated with a more modern palette
@@ -71,7 +71,6 @@ const Dashboard = () => {
   const [currentTrack, setCurrentTrack] = useState(0)
   const [progress, setProgress] = useState(0)
   const [volume, setVolume] = useState(80)
-  const [previousVolume, setPreviousVolume] = useState(80) // Store previous volume for mute toggle
   const [isMuted, setIsMuted] = useState(false)
   const audioRef = useRef(new Audio())
 
@@ -303,9 +302,6 @@ const Dashboard = () => {
   }
 
   // Handle Generate Now button click
-  const [receivedSuccessMessage, setReceivedSuccessMessage] = useState(false)
-
-  // In handleGenerateNow function
   const handleGenerateNow = () => {
     if (isGenerating) {
       // Cancel the generation if it's already running
@@ -320,7 +316,6 @@ const Dashboard = () => {
 
     setIsGenerating(true)
     setGenerationStatus("Initializing...")
-    setReceivedSuccessMessage(false) // Reset success flag for the new generation attempt
 
     // Create EventSource for SSE
     const eventSource = new EventSource("https://newsxapi.newsloop.xyz/v1/Generate_now", {
@@ -347,12 +342,8 @@ const Dashboard = () => {
 
       // Check if this is a success message
       if (event.data.includes("Audio file generated successfully")) {
-        setReceivedSuccessMessage(true)
         // Even on success message, we'll let the 'done' event or a subsequent error/timeout handle the final cleanup,
         // or if this success message is the definitive end, call handleGenerationEnd.
-        // For consistency with original logic that had a timeout, let's assume this message
-        // might be followed by more or a 'done' event. If it's the *absolute* end, call handleGenerationEnd().
-        // The original code treated this as completion with a timeout, so we can call handleGenerationEnd.
         handleGenerationEnd();
       }
     }
@@ -391,7 +382,7 @@ const Dashboard = () => {
         }
         return response.json()
       })
-      .then((data) => {
+      .then(() => {
         // Mark as successfully deleted
         setDeletedFiles((prev) => new Set(prev).add(objectName))
 
@@ -577,8 +568,7 @@ const Dashboard = () => {
         audioRef.current.volume = volume / 100
       }
     } else {
-      // Mute - save current volume and set to 0
-      setPreviousVolume(volume)
+      // Mute - set to 0
       setIsMuted(true)
       if (audioRef.current) {
         audioRef.current.volume = 0

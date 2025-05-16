@@ -94,6 +94,7 @@ EOF
             }
         }
         
+        // ...existing code...
         stage('Build') {
             steps {
                 sh '''
@@ -103,11 +104,21 @@ EOF
                 # Debug node version
                 node -v
                 
-                # Modified build command to avoid direct TypeScript usage
-                npm run build || (echo "Using alternative build method" && npm exec -- vite build)
+                # Find and fix permissions on vite and other executables
+                find node_modules/.bin -type f -exec chmod +x {} \\;
+                
+                # Check vite command location and permissions
+                which vite || echo "vite not found in PATH"
+                ls -la node_modules/.bin/vite || echo "vite executable not found"
+                
+                # Try different build approaches
+                npm run build || \
+                npx vite build || \
+                (npm install -g vite && vite build)
                 '''
             }
         }
+// ...existing code...
         
         stage('Test') {
             steps {
